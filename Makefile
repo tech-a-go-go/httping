@@ -20,6 +20,7 @@ DEBUG=yes
 WFLAGS=-Wall -W
 OFLAGS=-O3
 CFLAGS+=$(WFLAGS) $(OFLAGS) -DVERSION=\"$(VERSION)\"
+LDFLAGS=-lm
 
 PACKAGE=$(TARGET)-$(VERSION)
 PREFIX=/usr
@@ -72,7 +73,7 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(WFLAGS) $(OBJS) $(LDFLAGS) -o $(TARGET)
 	#
-	# Oh, blatant plug: http://keetweej.vanheusden.com/wishlist.html
+	# Oh, blatant plug: http://www.vanheusden.com/wishlist.html
 
 install: $(TARGET)
 	$(INSTALLDIR) $(DESTDIR)/$(BINDIR)

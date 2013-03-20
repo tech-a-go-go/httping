@@ -22,8 +22,14 @@ for a list of commandline switches. Also check the man-page.
 
 plot-json.py is a script to convert the json-output of httping to a script for gnuplot.
 
+If this script fails with the following error:
+	ValueError: Expecting object: [...]
+then make sure the json-file ends with a ']' (without the quotes).
+In sm cases this character is missing.
+
 
 Thanks to Thanatos for cookie and authentication support.
+Many thanks to Olaf van der Spek for lots of bug-reports, testing, ideas and suggestions.
 
 
 For everything more or less related to 'httping', please feel free

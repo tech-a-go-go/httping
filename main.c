@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <math.h>
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
@@ -29,6 +30,8 @@
 #include "utils.h"
 #include "error.h"
 #include "socks5.h"
+
+#define MI_MA 999999999.9
 
 static volatile int stop = 0;
 
@@ -56,6 +59,7 @@ void version(void)
 
 void help_long(void)
 {
+	fprintf(stderr, "--aggregate x[,y[,z]]  show an aggregate each x[/y[/z[/etc]]] seconds\n");
 	fprintf(stderr, "--audible-ping         -a\n");
 	fprintf(stderr, "--basic-auth           -A\n");
 	fprintf(stderr, "--bind-to              -y\n");
@@ -72,9 +76,9 @@ void help_long(void)
 	fprintf(stderr, "--nagios-mode-1        -n\n");
 	fprintf(stderr, "--nagios-mode-2        -n\n");
 	fprintf(stderr, "--no-cache             -Z\n");
-	fprintf(stderr, "--offset-red           from what ping offset to show the value in red (must be bigger than yellow)\n");
-	fprintf(stderr, "--offset-show          from what ping offset to show the results\n");
-	fprintf(stderr, "--offset-yellow        from what ping offset to show the value in yellow\n");
+	fprintf(stderr, "--threshold-red        from what ping value to show the value in red (must be bigger than yellow)\n");
+	fprintf(stderr, "--threshold-show       from what ping value to show the results\n");
+	fprintf(stderr, "--threshold-yellow     from what ping value to show the value in yellow\n");
 	fprintf(stderr, "--ok-result-codes      -o (only for -m)\n");
 	fprintf(stderr, "--parseable-output     -m\n");
 	fprintf(stderr, "--password             -P\n");
@@ -168,6 +172,7 @@ void usage(const char *me)
 	fprintf(stderr, "-V             show the version\n\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "-J             list long options\n");
+	fprintf(stderr, "               NOTE: not all functionality has a \"short\" switch, so not all are listed here! Please check -J too.\n");
 	fprintf(stderr, "\n");
 
 	dummy = getenv("TERM");
@@ -181,7 +186,7 @@ void usage(const char *me)
 		strcpy(host, "localhost");
 
 	fprintf(stderr, "Example:\n");
-	fprintf(stderr, "\t%s %s%s -s -Z", me, host, has_color ? " -Y" : "");
+	fprintf(stderr, "\t%s %s%s -s -Z\n\n", me, host, has_color ? " -Y" : "");
 }
 
 void emit_json(char ok, int seq, double start_ts, double connect_end_ts, double ping_end_ts, int http_code, const char *msg, int header_size, int data_size, double Bps, const char *host, const char *ssl_fp, double toff_diff_ts)
@@ -210,7 +215,7 @@ void emit_json(char ok, int seq, double start_ts, double connect_end_ts, double 
 void emit_error(int seq, double start_ts, double cur_ts)
 {
 	if (!quiet && !machine_readable && !nagios_mode && !json_output)
-		printf("%s%s%s", c_error, last_error, c_normal);
+		printf("%s%s%s\n", c_error, last_error, c_normal);
 
 	if (json_output)
 		emit_json(0, seq, start_ts, cur_ts, -1, -1, last_error, -1, -1, -1, "", "", -1);
@@ -373,7 +378,7 @@ char * create_request_header(const char *get, char use_proxyhost, char get_inste
 	return request;
 }
 
-void interpret_url(const char *in, char **path, char **hostname, int *portnr, char use_ipv6, char use_ssl)
+void interpret_url(const char *in, char **path, char **hostname, int *portnr, char use_ipv6, char use_ssl, char **complete_url)
 {
 	char in_use[65536] = { 0 }, *dummy = NULL;
 
@@ -398,6 +403,8 @@ void interpret_url(const char *in, char **path, char **hostname, int *portnr, ch
 	/* sanity check */
 	if (strncasecmp(in_use, "http://", 7) == 0 && use_ssl)
 		error_exit("using \"http://\" with SSL enabled (-l)");
+
+	*complete_url = strdup(in_use);
 
 	/* fetch hostname */
 	if (strncasecmp(in_use, "http://", 7) == 0)
@@ -434,6 +441,89 @@ void interpret_url(const char *in, char **path, char **hostname, int *portnr, ch
 		*path = strdup("/");
 }
 
+typedef struct {
+	int interval, last_ts;
+	double value, sd, min, max;
+	int n_values;
+} aggregate_t;
+
+void set_aggregate(char *in, int *n_aggregates, aggregate_t **aggregates)
+{
+	char *dummy = in;
+
+	*n_aggregates = 0;
+
+	for(;dummy;)
+	{
+		(*n_aggregates)++;
+
+		*aggregates = (aggregate_t *)realloc(*aggregates, *n_aggregates * sizeof(aggregate_t));
+
+		memset(&(*aggregates)[*n_aggregates - 1], 0x00, sizeof(aggregate_t));
+
+		(*aggregates)[*n_aggregates - 1].interval = atoi(dummy);
+		(*aggregates)[*n_aggregates - 1].max = -MI_MA;
+		(*aggregates)[*n_aggregates - 1].min =  MI_MA;
+
+		dummy = strchr(dummy, ',');
+		if (dummy)
+			dummy++;
+	}
+}
+
+void do_aggregates(double cur_ms, int cur_ts, int n_aggregates, aggregate_t *aggregates, int verbose)
+{
+	int index=0;
+
+	/* update measurements */
+	for(index=0; index<n_aggregates; index++)
+	{
+		aggregates[index].value += cur_ms;
+
+		if (cur_ms < aggregates[index].min)
+			aggregates[index].min = cur_ms;
+
+		if (cur_ms > aggregates[index].max)
+			aggregates[index].max = cur_ms;
+
+		aggregates[index].sd += cur_ms * cur_ms;
+
+		aggregates[index].n_values++;
+	}
+
+	/* emit */
+	for(index=0; index<n_aggregates && cur_ts > 0; index++)
+	{
+		aggregate_t *a = &aggregates[index];
+
+		if (cur_ts - a -> last_ts >= a -> interval)
+		{
+			double avg = a -> n_values ? a -> value / (double)a -> n_values : -1.0;
+
+			printf("AGG[%d]: %d values, min/avg/max%s = %.1f/%.1f/%.1f", a -> interval, a -> n_values, verbose ? "/sd" : "", a -> min, avg, a -> max);
+
+			if (verbose)
+			{
+				double sd = -1.0;
+
+				if (a -> n_values)
+					sd = sqrt((a -> sd / (double)a -> n_values) - pow(avg, 2.0));
+
+				printf("/%.1f", sd);
+			}
+
+			printf(" ms\n");
+
+			aggregates[index].value =
+			aggregates[index].sd    = 0.0;
+			aggregates[index].min =  MI_MA;
+			aggregates[index].max = -MI_MA;
+			aggregates[index].n_values = 0;
+			aggregates[index].last_ts = cur_ts;
+		}
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	char *hostname = NULL;
@@ -448,7 +538,7 @@ int main(int argc, char *argv[])
 	double wait = 1.0;
 	int audible = 0;
 	int ok = 0, err = 0;
-	double min = 999999999999999.0, avg = 0.0, max = 0.0;
+	double min = 999999999999999.0, avg = 0.0, max = 0.0, sd = 0.0;
 	int timeout=30;
 	char show_statuscodes = 0;
 	char use_ssl = 0;
@@ -477,6 +567,7 @@ int main(int argc, char *argv[])
 	int Bps_limit = -1;
 	char show_bytes_xfer = 0, show_fp = 0;
 	SSL *ssl_h = NULL;
+	BIO *s_bio = NULL;
 	struct sockaddr_in *bind_to = NULL;
 	struct sockaddr_in bind_to_4;
 	struct sockaddr_in6 bind_to_6;
@@ -484,7 +575,6 @@ int main(int argc, char *argv[])
 	char split = 0, use_ipv6 = 0;
 	char persistent_connections = 0, persistent_did_reconnect = 0;
 	char no_cache = 0;
-	char *getcopyorg = NULL;
 	char tfo = 0;
 	char abort_on_resolve_failure = 1;
 	const char *c_red = "";
@@ -503,10 +593,13 @@ int main(int argc, char *argv[])
 	char add_host_header = 1;
 	char *proxy_buster = NULL;
 	char proxy_is_socks5 = 0;
-	const char *url = NULL;
+	char *url = NULL, *complete_url = NULL;
+	int n_aggregates = 0;
+	aggregate_t *aggregates = NULL;
 
 	static struct option long_options[] =
 	{
+		{"aggregate",   1, NULL, 9 },
 		{"url",		1, NULL, 'g' },
 		{"hostname",	1, NULL, 'h' },
 		{"port",	1, NULL, 'p' },
@@ -613,6 +706,10 @@ int main(int argc, char *argv[])
 
 			case 8:
 				proxy_password = optarg;
+				break;
+
+			case 9:
+				set_aggregate(optarg, &n_aggregates, &aggregates);
 				break;
 
 			case 'Y':
@@ -820,7 +917,7 @@ int main(int argc, char *argv[])
 #ifdef TCP_TFO
 				tfo = 1;
 #else
-				printf("Warning: TCP TFO is not supported. Disabling.\n");
+				fprintf(stderr, "Warning: TCP TFO is not supported. Disabling.\n");
 #endif
 				break;
  
@@ -832,6 +929,9 @@ int main(int argc, char *argv[])
 			case '?':
 			default:
 				version();
+
+				fprintf(stderr, "Command not understood!\n\n");
+
 				usage(argv[0]);
 				return 1;
 		}
@@ -849,10 +949,13 @@ int main(int argc, char *argv[])
 	if (machine_readable && json_output)
 		error_exit("Cannot combine -m with -M");
 
+	if ((machine_readable || json_output) && n_aggregates > 0)
+		error_exit("Aggregates can only be used in non-machine/json output mode");
+
 	last_error[0] = 0x00;
 
-	if (!get_instead_of_head && show_Bps)
-		error_exit("-b/-B can only be used when also using -G\n");
+	if (!(get_instead_of_head || use_ssl) && show_Bps)
+		error_exit("-b/-B can only be used when also using -G (GET instead of HEAD) or -l (use SSL)\n");
 
 	if (tfo && use_ssl)
 		error_exit("TCP Fast open and SSL not supported together\n");
@@ -881,7 +984,7 @@ int main(int argc, char *argv[])
 	if (!machine_readable && !json_output)
 		printf("%s%s", c_normal, c_white);
 
-	interpret_url(url, &get, &hostname, &portnr, use_ipv6, use_ssl);
+	interpret_url(url, &get, &hostname, &portnr, use_ipv6, use_ssl, &complete_url);
 
 	if (verbose)
 		printf("Connecting to host %s, port %d and requesting file %s\n\n", hostname, portnr, get);
@@ -904,10 +1007,10 @@ int main(int argc, char *argv[])
 	SSL_CTX *client_ctx = NULL;
 	if (use_ssl)
 	{
-		client_ctx = initialize_ctx();
+		client_ctx = initialize_ctx(ask_compression);
 		if (!client_ctx)
 		{
-			snprintf(last_error, sizeof last_error, "problem creating SSL context\n");
+			snprintf(last_error, sizeof last_error, "problem creating SSL context");
 			goto error_exit;
 		}
 	}
@@ -945,7 +1048,7 @@ int main(int argc, char *argv[])
 		ai_use = select_resolved_host(ai, use_ipv6);
 		if (!ai_use)
 		{
-			snprintf(last_error, sizeof last_error, "No valid IPv4 or IPv6 address found for %s\n", host);
+			snprintf(last_error, sizeof last_error, "No valid IPv4 or IPv6 address found for %s", host);
 
 			if (abort_on_resolve_failure)
 				error_exit(last_error);
@@ -1013,7 +1116,7 @@ persistent_loop:
 				ai_use = select_resolved_host(ai, use_ipv6);
 				if (!ai_use)
 				{
-					snprintf(last_error, sizeof last_error, "No valid IPv4 or IPv6 address found for %s\n", host);
+					snprintf(last_error, sizeof last_error, "No valid IPv4 or IPv6 address found for %s", host);
 					emit_error(curncount, dstart, get_ts());
 					err++;
 
@@ -1072,7 +1175,6 @@ persistent_loop:
 #ifndef NO_SSL
 				if (use_ssl && ssl_h == NULL)
 				{
-					BIO *s_bio = NULL;
 					int rc = connect_ssl(fd, client_ctx, &ssl_h, &s_bio, timeout);
 					if (rc != 0)
 					{
@@ -1095,7 +1197,7 @@ persistent_loop:
 			if (fd < 0)
 			{
 				if (fd == RC_TIMEOUT)
-					snprintf(last_error, sizeof last_error, "timeout connecting to host\n");
+					snprintf(last_error, sizeof last_error, "timeout connecting to host");
 
 				emit_error(curncount, dstart, get_ts());
 				err++;
@@ -1131,13 +1233,13 @@ persistent_loop:
 				}
 
 				if (rc == -1)
-					snprintf(last_error, sizeof last_error, "error sending request to host\n");
+					snprintf(last_error, sizeof last_error, "error sending request to host");
 				else if (rc == RC_TIMEOUT)
-					snprintf(last_error, sizeof last_error, "timeout sending to host\n");
+					snprintf(last_error, sizeof last_error, "timeout sending to host");
 				else if (rc == RC_CTRLC)
 				{/* ^C */}
 				else if (rc == 0)
-					snprintf(last_error, sizeof last_error, "connection prematurely closed by peer\n");
+					snprintf(last_error, sizeof last_error, "connection prematurely closed by peer");
 
 				emit_error(curncount, dstart, get_ts());
 
@@ -1224,7 +1326,7 @@ persistent_loop:
 				char *length = strstr(reply, "\nContent-Length:");
 				if (!length)
 				{
-					snprintf(last_error, sizeof last_error, "'Content-Length'-header missing!\n");
+					snprintf(last_error, sizeof last_error, "'Content-Length'-header missing!");
 					emit_error(curncount, dstart, get_ts());
 					close(fd);
 					fd = -1;
@@ -1255,9 +1357,9 @@ persistent_loop:
 				}
 
 				if (rc == RC_SHORTREAD)
-					snprintf(last_error, sizeof last_error, "short read during receiving reply-headers from host\n");
+					snprintf(last_error, sizeof last_error, "short read during receiving reply-headers from host");
 				else if (rc == RC_TIMEOUT)
-					snprintf(last_error, sizeof last_error, "timeout while receiving reply-headers from host\n");
+					snprintf(last_error, sizeof last_error, "timeout while receiving reply-headers from host");
 
 				emit_error(curncount, dstart, get_ts());
 
@@ -1315,19 +1417,18 @@ persistent_loop:
 #ifndef NO_SSL
 			if (use_ssl && !persistent_connections)
 			{
-				if (show_fp && ssl_h != NULL)
-				{
+				if ((show_fp || json_output) && ssl_h != NULL)
 					fp = get_fingerprint(ssl_h);
-				}
 
 				if (close_ssl_connection(ssl_h, fd) == -1)
 				{
-					snprintf(last_error, sizeof last_error, "error shutting down ssl\n");
+					snprintf(last_error, sizeof last_error, "error shutting down ssl");
 					emit_error(curncount, dstart, get_ts());
 				}
 
 				SSL_free(ssl_h);
 				ssl_h = NULL;
+				s_bio = NULL;
 			}
 #endif
 
@@ -1339,6 +1440,7 @@ persistent_loop:
 
 			ms = (dend - dstart) * 1000.0;
 			avg += ms;
+			sd += ms * ms;
 			min = min > ms ? ms : min;
 			max = max < ms ? ms : max;
 
@@ -1355,6 +1457,8 @@ persistent_loop:
 					snprintf(&last_error[strlen(last_error)], sizeof last_error - 256, "getnameinfo() failed: %d (%s)", errno, strerror(errno));
 
 				emit_json(1, curncount, dstart, dafter_connect, dend, atoi(sc), sc, headers_len, len, Bps, current_host, fp, toff_diff_ts);
+
+				free(fp);
 			}
 			else if (machine_readable)
 			{
@@ -1420,15 +1524,22 @@ persistent_loop:
 				if (getnameinfo((const struct sockaddr *)&addr, sizeof addr, current_host, sizeof current_host, NULL, 0, NI_NUMERICHOST) == -1)
 					snprintf(current_host, sizeof current_host, "getnameinfo() failed: %d (%s)", errno, strerror(errno));
 
+				const char *i6_bs = "", *i6_be = "";
+				if (addr.sin6_family == AF_INET6)
+				{
+					i6_bs = "[";
+					i6_be = "]";
+				}
+
 				if (offset_red > 0.0 && ms >= offset_red)
 					ms_color = c_red;
 				else if (offset_yellow > 0.0 && ms >= offset_yellow)
 					ms_color = c_yellow;
 
 				if (persistent_connections && show_bytes_xfer)
-					printf("%s%s %s%s%s:%s%d%s (%d/%d bytes), seq=%s%d%s ", c_white, operation, c_red, current_host, c_white, c_yellow, portnr, c_white, headers_len, len, c_blue, curncount-1, c_white);
+					printf("%s%s %s%s%s%s%s:%s%d%s (%d/%d bytes), seq=%s%d%s ", c_white, operation, c_red, i6_bs, current_host, i6_be, c_white, c_yellow, portnr, c_white, headers_len, len, c_blue, curncount-1, c_white);
 				else
-					printf("%s%s %s%s%s:%s%d%s (%d bytes), seq=%s%d%s ", c_white, operation, c_red, current_host, c_white, c_yellow, portnr, c_white, headers_len, c_blue, curncount-1, c_white);
+					printf("%s%s %s%s%s%s%s:%s%d%s (%d bytes), seq=%s%d%s ", c_white, operation, c_red, i6_bs, current_host, i6_be, c_white, c_yellow, portnr, c_white, headers_len, c_blue, curncount-1, c_white);
 
 				if (split)
 					printf("time=%.2f%s+%s%.2f%s=%s%s%.2f%s ms %s%s%s", (dafter_connect - dstart) * 1000.0, sep, unsep, (dend - dafter_connect) * 1000.0, sep, unsep, ms_color, ms, c_white, c_cyan, sc?sc:"", c_white);
@@ -1476,6 +1587,8 @@ persistent_loop:
 					putchar('\a');
 
 				printf("\n");
+
+				do_aggregates(ms, (int)(get_ts() - started_at), n_aggregates, aggregates, verbose);
 			}
 
 			if (show_statuscodes && ok_str != NULL && sc != NULL)
@@ -1511,7 +1624,7 @@ persistent_loop:
 	{
 		int dummy = count;
 
-		printf("--- %s ping statistics ---\n", get);
+		printf("--- %s ping statistics ---\n", complete_url);
 
 		if (curncount == 0 && err > 0)
 			fprintf(stderr, "internal error! (curncount)\n");
@@ -1523,7 +1636,15 @@ persistent_loop:
 
 		if (ok > 0)
 		{
-			printf("round-trip min/avg/max = %s%.1f%s/%s%.1f%s/%s%.1f%s ms\n", c_bright, min, c_normal, c_bright, avg_httping_time, c_normal, c_bright, max, c_normal);
+			printf("round-trip min/avg/max%s = %s%.1f%s/%s%.1f%s/%s%.1f%s", verbose ? "/sd" : "", c_bright, min, c_normal, c_bright, avg_httping_time, c_normal, c_bright, max, c_normal);
+
+			if (verbose)
+			{
+				double sd_final = ok ? sqrt((sd / (double)ok) - pow(avg_httping_time, 2.0)) : -1.0;
+				printf("/%.1f", sd_final);
+			}
+
+			printf(" ms\n");
 
 			if (show_Bps)
 				printf("Transfer speed: min/avg/max = %s%f%s/%s%f%s/%s%f%s KB\n", c_bright, Bps_min / 1024, c_normal, c_bright, (Bps_avg / (double)ok) / 1024.0, c_normal, c_bright, Bps_max / 1024.0, c_normal);
@@ -1563,22 +1684,32 @@ error_exit:
 		return nagios_exit_code;
 	}
 
-	freeaddrinfo(ai);
-	free(request);
-	free(buffer);
-	free(getcopyorg);
-
 	if (!json_output && !machine_readable)
 		printf("%s", c_very_normal);
 
 	if (json_output)
 		printf("\n]\n");
 
+	freeaddrinfo(ai);
+	free(request);
+	free(buffer);
+	free(get);
+	free(hostname);
+	free(complete_url);
+
+	free(aggregates);
+
+#ifndef NO_SSL
+	if (use_ssl)
+	{
+		SSL_CTX_free(client_ctx);
+
+		shutdown_ssl();
+	}
+#endif
+
 	if (ok)
 		return 0;
 	else
 		return 127;
 }
-
-
-

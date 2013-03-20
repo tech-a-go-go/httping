@@ -30,16 +30,19 @@ minp = 999999999
 maxp = -minp
 
 for row in json_data:
-	val = float(row['total_s'])
-	data_fh.write("%f %f\n" % (float(row['start_ts']), val))
-	host=row['host']
-	total += val
-	total_sd += val * val
-	n += 1
-	if val > maxp:
-		maxp = val
-	if val < minp:
-		minp = val
+	if row['status'] == '1':
+		val = float(row['total_s'])
+		data_fh.write("%f %f\n" % (float(row['start_ts']), val))
+		host=row['host']
+		total += val
+		total_sd += val * val
+		n += 1
+		if val > maxp:
+			maxp = val
+		if val < minp:
+			minp = val
+
+print "Rows ignored: %d" % (len(json_data) - n)
 
 data_fh.close()
 
@@ -61,7 +64,7 @@ script_fh = open(fscript, "w")
 
 script_fh.write("#! /bin/sh\n\n")
 script_fh.write("gnuplot <<EOF > " + fpng + "\n")
-script_fh.write("set term png size 800,600\n")
+script_fh.write("set term png size 800,600 tiny\n")
 script_fh.write("set autoscale\n")
 script_fh.write("set timefmt \"%s\"\n")
 script_fh.write("set xdata time\n")

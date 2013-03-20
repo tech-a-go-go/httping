@@ -4,16 +4,32 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <openssl/ssl.h>
 #include <openssl/bio.h>
+#include <openssl/conf.h>
+#include <openssl/engine.h>
+#include <openssl/err.h>
 #include <openssl/evp.h>
-#include <openssl/x509.h>
 #include <openssl/md5.h>
+#include <openssl/ssl.h>
+#include <openssl/x509.h>
 
 #include "gen.h"
 #include "mssl.h"
 
-BIO *bio_err=0;
+BIO *bio_err = NULL;
+
+void shutdown_ssl(void)
+{
+	BIO_free(bio_err);
+
+	ERR_free_strings();
+
+	ERR_remove_state(0);
+	ENGINE_cleanup();
+	CONF_modules_free();
+	EVP_cleanup();
+	CRYPTO_cleanup_all_ex_data();
+}
 
 char close_ssl_connection(SSL *ssl_h, int socket_h)
 {
@@ -48,7 +64,7 @@ int READ_SSL(SSL *ssl_h, char *whereto, int len)
 		{
 			if (errno != EINTR && errno != EAGAIN)
 			{
-				sprintf(last_error, "READ_SSL: io-error: %s\n", strerror(errno));
+				sprintf(last_error, "READ_SSL: io-error: %s", strerror(errno));
 				return -1;
 			}
 		}
@@ -79,7 +95,7 @@ int WRITE_SSL(SSL *ssl_h, const char *wherefrom, int len)
 		{
 			if (errno != EINTR && errno != EAGAIN)
 			{
-				sprintf(last_error, "WRITE_SSL: io-error: %s\n", strerror(errno));
+				sprintf(last_error, "WRITE_SSL: io-error: %s", strerror(errno));
 				return -1;
 			}
 		}
@@ -125,19 +141,20 @@ int connect_ssl(int socket_h, SSL_CTX *client_ctx, SSL **ssl_h, BIO **s_bio, int
 	dummy = SSL_connect(*ssl_h);
 	if (dummy <= 0)
 	{
-		sprintf(last_error, "problem starting SSL connection: %d\n", SSL_get_error(*ssl_h, dummy));
+		sprintf(last_error, "problem starting SSL connection: %d", SSL_get_error(*ssl_h, dummy));
 		return -1;
 	}
 
 	return 0;
 }
 
-SSL_CTX * initialize_ctx(void)
+SSL_CTX * initialize_ctx(char ask_compression)
 {
 	if (!bio_err)
 	{
 		SSL_library_init();
 		SSL_load_error_strings();
+		ERR_load_crypto_strings();
 
 		/* error write context */
 		bio_err = BIO_new_fp(stderr, BIO_NOCLOSE);
@@ -146,7 +163,12 @@ SSL_CTX * initialize_ctx(void)
 	/* create context */
 	const SSL_METHOD *meth = SSLv23_method();
 
-	return SSL_CTX_new(meth);
+	SSL_CTX *ctx = SSL_CTX_new(meth);
+
+	if (!ask_compression)
+		SSL_CTX_set_options(ctx, SSL_OP_NO_COMPRESSION);
+
+	return ctx;
 }
 
 char * get_fingerprint(SSL *ssl_h)
