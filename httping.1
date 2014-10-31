@@ -31,19 +31,19 @@ Enable IPv6 mode. Default is IPv4.
 Audible ping
 .TP
 .B "\-b"
-Use this switch together with '-G'. When this option is used, the transferspeed (in KB/s) is shown.
+Use this switch together with '\-G'. When this option is used, the transferspeed (in KB/s) is shown.
 .TP
 .B "\-B"
-Use this switch together with '-G'. Ask the HTTP server to compress the returned data: this will reduce the influence of the bandwidth of your connection while increasing the influence of the processorpower of the HTTP server.
+Use this switch together with '\-G'. Ask the HTTP server to compress the returned data: this will reduce the influence of the bandwidth of your connection while increasing the influence of the processorpower of the HTTP server.
 .TP
 .B "\-c count"
 How many probes to send before exiting.
 .TP
 .B "\-D"
-Do not draw graphs in ncurses mode (-K).
+Do not draw graphs in ncurses mode (\-K).
 .TP
 .B "\-e str"
-When the status-code differs from the ones selected with '-o', the given string is displayed.
+When the status-code differs from the ones selected with '\-o', the given string is displayed.
 .TP
 .B "\-E"
 Retrieve proxy settings from environment variables ('http_proxy' and 'https_proxy').
@@ -61,7 +61,7 @@ Do a GET request instead of a HEAD request: this means that also the complete pa
 This selects the url to probe. E.g.: http://localhost/
 .TP
 .B "\-h hostname"
-Instead of '-g' one can also set a hostname to probe with -h: -h localhost
+Instead of '\-g' one can also set a hostname to probe with -h: -h localhost
 .TP
 .B "\-I str"
 UserAgent-string to send to the webserver (instead of 'HTTPing <version>').
@@ -73,13 +73,13 @@ How many seconds to sleep between every probe sent.
 Enable ncurses user interface.
 .TP
 .B "\-L x"
-Use this switch together with '-G'. Limit the amount of data transferred to 'x'. Note that this only affects the content of the page/file and not the headerdata.
+Use this switch together with '\-G'. Limit the amount of data transferred to 'x'. Note that this only affects the content of the page/file and not the headerdata.
 .TP
 .B "\-l"
 Connect using SSL: for this to work you need to give a 'https'-url or a 443 portnumber.
 .TP
 .B "\-m"
-Show machine readable output (also check '-o' and '-e').
+Show machine readable output (also check '\-o' and '\-e').
 .TP
 .B "\-N x"
 Switches HTTPing to Nagios-plugin mode 2: return 0 when everything is fine, 'x' when anything fails. E.g.: 1 => Nagios warning state, 2 => Nagios critical state.
@@ -88,10 +88,10 @@ Switches HTTPing to Nagios-plugin mode 2: return 0 when everything is fine, 'x' 
 Switches HTTPing to Nagios-plugin mode 1: return exitcode '1' when the average response time is bigger then 'warn', return exitcode '2' when the the average response time is bigger then 'crit'. In all other cases return exitcode '0'.
 .TP
 .B "\-o x,x,..."
-This selects the HTTP status-codes which are regarded as an OK-state (only with '-m').
+This selects the HTTP status-codes which are regarded as an OK-state (only with '\-m').
 .TP
 .B "\-p portnumber"
--p can be used together with -h. -p selects the portnumber to probe.
+-p can be used together with \-h. \-p selects the portnumber to probe.
 .TP
 .B "\-q"
 Be quiet, only return an exit-code.
@@ -100,7 +100,7 @@ Be quiet, only return an exit-code.
 Referer-string to send to the webserver.
 .TP
 .B "\-r"
-Only resolve the hostname once: this takes the resolving out of the loop so that the latency of the DNS is not measured. Also usefull when you want to measure only 1 webserver while the DNS returns a different ip-address for each resolve ('roundrobin').
+Only resolve the hostname once: this takes the resolving out of the loop so that the latency of the DNS is not measured. Also useful when you want to measure only 1 webserver while the DNS returns a different ip-address for each resolve ('roundrobin').
 .TP
 .B "\-S"
 Split measured latency in time to connect and time to exchange a request with the HTTP server.
@@ -115,7 +115,7 @@ Read the password for website authentication from file 'x' (instead of entering 
 How long to wait for answer from the other side.
 .TP
 .B "\-U"
-Enable authentication against website. Set username with -U, set password with -P (or -T to read the password from a file).
+Enable authentication against website. Set username with \-U, set password with \-P (or \-T to read the password from a file).
 .TP
 .B "\-v"
 Increase verbosity mode. To show standard deviation and dates in output.
@@ -139,7 +139,7 @@ When connecting using SSL, display the fingerprint of the X509 certificate(s) of
 Abbreviate values bigger than thousand, million, billion, etc.
 .TP
 .B "\-\-adaptive-interval" or "\-\-ai"
-(Try to) ping on the same interval. E.g. if interval is set to 1.0 seconds and ping a ping t[n] occurs at 500s with duration 250ms, then the next ping (t[n+1]) will happen at 501 seconds and not at 501.25 seconds. Of course when the ping duration is > bigger than the interval, a ping will be "skipped" (not literally: the sequence number will continue) and t[n+1] will then be e.g. 502s instead of the expected 501s. This is usefull for example in the ncurses output mode where an fft is calculated over the ping times.
+(Try to) ping on the same interval. E.g. if interval is set to 1.0 seconds and ping a ping t[n] occurs at 500s with duration 250ms, then the next ping (t[n+1]) will happen at 501 seconds and not at 501.25 seconds. Of course when the ping duration is > bigger than the interval, a ping will be "skipped" (not literally: the sequence number will continue) and t[n+1] will then be e.g. 502s instead of the expected 501s. This is useful for example in the ncurses output mode where an fft is calculated over the ping times.
 .TP
 .B "\-\-aggregates x[,y[,z[,etc.]]]"
 Show aggregates every x[/y[/z[/etc]]] seconds.

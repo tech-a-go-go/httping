@@ -81,7 +81,7 @@ if [ $? -eq 0 ] || [ $F_FW -eq 1 ] ; then
 	echo \+ system has FFTW3 development libraries
 	FW="FW=yes"
 else
-	echo \- this system does NOT have the FFTW3 development libraries - they are optional and only usefull when also including ncurses
+	echo \- this system does NOT have the FFTW3 development libraries - they are optional and only useful when also including ncurses
 	FW=""
 fi
 

@@ -220,7 +220,7 @@ msgid "transmit buffer size"
 msgstr "verzend buffer omvang"
 
 #: help.c:223
-msgid "resolve hostname only once (usefull when pinging roundrobin DNS: also takes the first DNS lookup out of the loop so that the first measurement is also correct)"
+msgid "resolve hostname only once (useful when pinging roundrobin DNS: also takes the first DNS lookup out of the loop so that the first measurement is also correct)"
 msgstr "eenmalig systeemnaam vertalen (dit is zinvol bij het pingen van een roterende DNS, bovendien haalt het de eerste vertaling uit de ping lus zodat de 1e ping niet een bovengemiddelde tijd duurt)"
 
 #: help.c:224

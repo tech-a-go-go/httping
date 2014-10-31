@@ -222,7 +222,7 @@ void usage(const char *me)
 	format_help(NULL, "--no-tcp-nodelay", gettext("do not disable Naggle"));
 	format_help(NULL, "--recv-buffer", gettext("receive buffer size"));
 	format_help(NULL, "--tx-buffer", gettext("transmit buffer size"));
-	format_help("-r", "--resolve-once", gettext("resolve hostname only once (usefull when pinging roundrobin DNS: also takes the first DNS lookup out of the loop so that the first measurement is also correct)"));
+	format_help("-r", "--resolve-once", gettext("resolve hostname only once (useful when pinging roundrobin DNS: also takes the first DNS lookup out of the loop so that the first measurement is also correct)"));
 	format_help("-W", NULL, gettext("do not abort the program if resolving failed: keep retrying"));
 	format_help("-y x", "--bind-to", gettext("bind to an ip-address (and thus interface) with an optional port"));
 #ifdef TCP_TFO

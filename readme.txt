@@ -11,7 +11,7 @@ You can also run 'configure' manually. Then the following switches apply:
 
 Please note that TCP fast open requires a Linux kernel of version 3.7 or more recent.
 
-'fftw3' support is only usefull if you include the ncurses interface.
+'fftw3' support is only useful if you include the ncurses interface.
 
 Debian package names:
 	ncurses requires libncursesw5-dev
