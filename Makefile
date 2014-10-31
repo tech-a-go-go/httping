@@ -11,7 +11,7 @@
 # do not wish to do so, delete this exception statement from your
 # version.  If you delete this exception statement from all source
 # files in the program, then also delete it here.
-# $Revision$
+# $Revision: 278 $
 
 -include makefile.inc
 
@@ -34,7 +34,7 @@ TARGET=httping
 LOCALEDIR=/usr/share/locale
 
 DEBUG=yes
-WFLAGS=-Wall -W -Wextra -pedantic
+WFLAGS=-Wall -W -Wextra -pedantic -D_FORTIFY_SOURCE=2
 OFLAGS=
 CFLAGS+=$(WFLAGS) $(OFLAGS) -DVERSION=\"$(VERSION)\" -DLOCALEDIR=\"$(LOCALEDIR)\"
 LDFLAGS+=-lm

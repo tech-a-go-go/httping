@@ -1,7 +1,7 @@
 #! /bin/sh
 
-FILE=/tmp/a.out_eb_$$
-FILE2=/tmp/a.out_eb2_$$
+FILE=`mktemp`
+FILE2=`mktemp`
 
 echo \*\*\* HTTPing v`grep VERSION version | cut -d = -f 2` \(`echo $Revision$ | awk '{ print $2; }'`\) configure script \*\*\*
 echo

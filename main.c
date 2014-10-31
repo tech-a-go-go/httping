@@ -1,5 +1,5 @@
 /* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
-/* $Revision$ */
+/* $Revision: 278 $ */
 
 #define _GNU_SOURCE
 #include <sys/ioctl.h>
@@ -986,8 +986,8 @@ int main(int argc, char *argv[])
 	};
 
 	setlocale(LC_ALL, "");
-	bindtextdomain("httping", LOCALEDIR);
-	textdomain("httping");
+	bindtextdomain("HTTPing", LOCALEDIR);
+	textdomain("HTTPing");
 
 	init_statst(&t_resolve);
 	init_statst(&t_connect);
