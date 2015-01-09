@@ -1777,7 +1777,7 @@ persistent_loop:
 					break;
 
 				dafter_write_complete = get_ts();
-				if (dafter_write_complete - dafter_connect >= timeout)
+				if ((dafter_write_complete - dafter_connect) * 1000.0 >= timeout)
 					break;
 
 				/* this keeps it somewhat from becoming a busy loop
