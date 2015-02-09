@@ -62,6 +62,15 @@ char ncurses_mode = 0;
 
 int fd = -1;
 
+volatile char got_sigquit = 0;
+
+void handler_quit(int s)
+{
+	signal(SIGQUIT, handler_quit);
+
+	got_sigquit = 1;
+}
+
 void determine_terminal_size(int *max_y, int *max_x)
 {
         struct winsize size;
@@ -820,6 +829,45 @@ void free_headers(char **additional_headers, int n_additional_headers)
 	free(additional_headers);
 }
 
+typedef struct
+{
+	double Bps_min, Bps_max;
+	long long int Bps_avg;
+} bps_t;
+
+void stats_line(const char with_header, const char *const complete_url, const int count, const int curncount, const int err, const int ok, double started_at, const char verbose, const stats_t *const t_total, const double avg_httping_time, bps_t *const bps)
+{
+	double total_took = get_ts() - started_at;
+	int dummy = count;
+
+	if (with_header)
+		printf(gettext("--- %s ping statistics ---\n"), complete_url);
+
+	if (curncount == 0 && err > 0)
+		fprintf(stderr, gettext("internal error! (curncount)\n"));
+
+	if (count == -1)
+		dummy = curncount;
+
+	printf(gettext("%s%d%s connects, %s%d%s ok, %s%3.2f%%%s failed, time %s%s%.0fms%s\n"), c_yellow, curncount, c_normal, c_green, ok, c_normal, c_red, (((double)err) / ((double)dummy)) * 100.0, c_normal, c_blue, c_bright, total_took * 1000.0, c_normal);
+
+	if (ok > 0)
+	{
+		printf(gettext("round-trip min/avg/max%s = %s%.1f%s/%s%.1f%s/%s%.1f%s"), verbose ? gettext("/sd") : "", c_bright, t_total -> min, c_normal, c_bright, avg_httping_time, c_normal, c_bright, t_total -> max, c_normal);
+
+		if (verbose)
+		{
+			double sd_final = t_total -> n ? sqrt((t_total -> sd / (double)t_total -> n) - pow(avg_httping_time, 2.0)) : -1.0;
+			printf("/%.1f", sd_final);
+		}
+
+		printf(" ms\n");
+
+		if (bps)
+			printf(gettext("Transfer speed: min/avg/max = %s%f%s/%s%f%s/%s%f%s KB\n"), c_bright, bps -> Bps_min / 1024, c_normal, c_bright, (bps -> Bps_avg / (double)ok) / 1024.0, c_normal, c_bright, bps -> Bps_max / 1024.0, c_normal);
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	double started_at = -1;
@@ -854,8 +902,7 @@ int main(int argc, char *argv[])
 	double avg_httping_time = -1.0;
 	int get_instead_of_head = 0;
 	char show_Bps = 0, ask_compression = 0;
-	double Bps_min = 1 << 30, Bps_max = -Bps_min;
-	long long int Bps_avg = 0;
+	bps_t bps;
 	int Bps_limit = -1;
 	char show_bytes_xfer = 0, show_fp = 0;
 	SSL *ssl_h = NULL;
@@ -880,7 +927,6 @@ int main(int argc, char *argv[])
 	aggregate_t *aggregates = NULL;
 	char *au_dummy = NULL, *ap_dummy = NULL;
 	stats_t t_connect, t_request, t_total, t_resolve, t_write, t_ssl, t_close, stats_to, tcp_rtt_stats, stats_header_size;
-	double total_took = 0;
 	char first_resolve = 1;
 	double graph_limit = MY_DOUBLE_INF;
 	char nc_graph = 1;
@@ -984,6 +1030,10 @@ int main(int argc, char *argv[])
 		{"help",	0, NULL, 22 },
 		{NULL,		0, NULL, 0   }
 	};
+
+	bps.Bps_min = 1 << 30;
+	bps.Bps_max = -bps.Bps_min;
+	bps.Bps_avg = 0;
 
 	setlocale(LC_ALL, "");
 	bindtextdomain("HTTPing", LOCALEDIR);
@@ -1456,6 +1506,8 @@ int main(int argc, char *argv[])
 
 	signal(SIGINT, handler);
 	signal(SIGTERM, handler);
+
+	signal(SIGQUIT, handler_quit);
 
 	timeout *= 1000.0;	/* change to ms */
 
@@ -2023,9 +2075,9 @@ persistent_loop:
 				dl_end = get_ts();
 
 				Bps = (double)bytes_transferred / max(dl_end - dl_start, 0.000001);
-				Bps_min = min(Bps_min, Bps);
-				Bps_max = max(Bps_max, Bps);
-				Bps_avg += Bps;
+				bps.Bps_min = min(bps.Bps_min, Bps);
+				bps.Bps_max = max(bps.Bps_max, Bps);
+				bps.Bps_avg += Bps;
 			}
 
 			dend = get_ts();
@@ -2278,6 +2330,12 @@ persistent_loop:
 				}
 			}
 
+			if (got_sigquit && !quiet && !machine_readable && !nagios_mode && !json_output)
+			{
+				got_sigquit = 0;
+				stats_line(0, complete_url, count, curncount, err, ok, started_at, verbose, &t_total, avg_httping_time, show_Bps ? &bps : NULL);
+			}
+
 			break;
 		}
 
@@ -2341,37 +2399,8 @@ persistent_loop:
 	else
 		avg_httping_time = -1.0;
 
-	total_took = get_ts() - started_at;
 	if (!quiet && !machine_readable && !nagios_mode && !json_output)
-	{
-		int dummy = count;
-
-		printf(gettext("--- %s ping statistics ---\n"), complete_url);
-
-		if (curncount == 0 && err > 0)
-			fprintf(stderr, gettext("internal error! (curncount)\n"));
-
-		if (count == -1)
-			dummy = curncount;
-
-		printf(gettext("%s%d%s connects, %s%d%s ok, %s%3.2f%%%s failed, time %s%s%.0fms%s\n"), c_yellow, curncount, c_normal, c_green, ok, c_normal, c_red, (((double)err) / ((double)dummy)) * 100.0, c_normal, c_blue, c_bright, total_took * 1000.0, c_normal);
-
-		if (ok > 0)
-		{
-			printf(gettext("round-trip min/avg/max%s = %s%.1f%s/%s%.1f%s/%s%.1f%s"), verbose ? gettext("/sd") : "", c_bright, t_total.min, c_normal, c_bright, avg_httping_time, c_normal, c_bright, t_total.max, c_normal);
-
-			if (verbose)
-			{
-				double sd_final = t_total.n ? sqrt((t_total.sd / (double)t_total.n) - pow(avg_httping_time, 2.0)) : -1.0;
-				printf("/%.1f", sd_final);
-			}
-
-			printf(" ms\n");
-
-			if (show_Bps)
-				printf(gettext("Transfer speed: min/avg/max = %s%f%s/%s%f%s/%s%f%s KB\n"), c_bright, Bps_min / 1024, c_normal, c_bright, (Bps_avg / (double)ok) / 1024.0, c_normal, c_bright, Bps_max / 1024.0, c_normal);
-		}
-	}
+		stats_line(1, complete_url, count, curncount, err, ok, started_at, verbose, &t_total, avg_httping_time, show_Bps ? &bps : NULL);
 
 error_exit:
 	if (nagios_mode)
