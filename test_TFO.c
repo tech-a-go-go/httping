@@ -1,20 +1,31 @@
 /* $Revision$ */
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <stdlib.h>
+
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 
+int main(void) {
+        int sfd = 0;
+        int qlen = 5;
 
-#ifndef TCP_FASTOPEN
-#define TCP_FASTOPEN	23
+        if ((sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
+                fprintf(stderr, "socket(): %s\n", strerror(errno));
+                exit(EXIT_FAILURE);
+        }
+
+#ifdef TCP_FASTOPEN
+        if (setsockopt(sfd, SOL_TCP, TCP_FASTOPEN, &qlen, sizeof(qlen)) < 0) {
+                fprintf(stderr, "setsockopt(): %s\n", strerror(errno));
+                exit(EXIT_FAILURE);
+        }
+#else
+        fprintf(stderr, "TCP_FASTOPEN: undefined\n");
+        return EXIT_FAILURE;
 #endif
-
-int main(int argc, char *argv[])
-{
-	int sfd = 0;
-	int qlen = 5;
-
-	setsockopt(sfd, IPPROTO_TCP, TCP_FASTOPEN, &qlen, sizeof(qlen));
-
-	return 0;
+        return EXIT_SUCCESS;
 }
