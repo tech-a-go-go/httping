@@ -58,7 +58,7 @@ else
 	TFO=""
 fi
 
-$CC -O0 -lncursesw -o $FILE test_ncurses.c 2> $FILE2
+$CC -O0 -o $FILE test_ncurses.c -lncursesw 2> $FILE2
 if [ $? -eq 0 ] || [ $F_NC -eq 1 ] ; then
 	echo \+ system has ncurses development libraries
 	NC="NC=yes"
@@ -67,7 +67,7 @@ else
 	NC=""
 fi
 
-$CC -O0 -lssl -lcrypto -o $FILE test_openssl.c 2> $FILE2
+$CC -O0 -o $FILE test_openssl.c  -lssl -lcrypto 2> $FILE2
 if [ $? -eq 0 ] || [ $F_OS -eq 1 ] ; then
 	echo \+ system has OpenSSL development libraries
 	SSL="SSL=yes"
@@ -76,7 +76,7 @@ else
 	SSL="SSL=no"
 fi
 
-$CC -O0 -lfftw3 -o $FILE test_fftw3.c 2> $FILE2
+$CC -O0 -o $FILE test_fftw3.c -lfftw3 2> $FILE2
 if [ $? -eq 0 ] || [ $F_FW -eq 1 ] ; then
 	echo \+ system has FFTW3 development libraries
 	FW="FW=yes"
