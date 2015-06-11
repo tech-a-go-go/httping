@@ -125,7 +125,7 @@ int WRITE_SSL(SSL *ssl_h, const char *wherefrom, int len)
 	return cnt;
 }
 
-int connect_ssl(int fd, SSL_CTX *client_ctx, SSL **ssl_h, BIO **s_bio, double timeout, double *ssl_handshake, const char *const server_name)
+int connect_ssl(int fd, SSL_CTX *client_ctx, SSL **ssl_h, BIO **s_bio, double timeout, double *ssl_handshake)
 {
 	int dummy = -1;
 	double dstart = get_ts();
@@ -152,8 +152,6 @@ int connect_ssl(int fd, SSL_CTX *client_ctx, SSL **ssl_h, BIO **s_bio, double ti
 
 	*s_bio = BIO_new_socket(fd, BIO_NOCLOSE);
 	SSL_set_bio(*ssl_h, *s_bio, *s_bio);
-
-	SSL_set_tlsext_host_name(*ssl_h, server_name);
 
 	dummy = SSL_connect(*ssl_h);
 	if (dummy <= 0)
