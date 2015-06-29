@@ -213,6 +213,9 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 	*s_bio = BIO_new_socket(fd, BIO_NOCLOSE);
 	SSL_set_bio(*ssl_h, *s_bio, *s_bio);
 
+	if (set_fd_nonblocking(fd) == -1)
+		return RC_INVAL;
+
 	do
 	{
 		int rc = SSL_connect(*ssl_h);
@@ -224,8 +227,6 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 			if (err == SSL_ERROR_WANT_CONNECT || err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE)
 			{
 				struct timeval tv;
-				const int rfd = SSL_get_rfd(*ssl_h);
-				const int wfd = SSL_get_wfd(*ssl_h);
 				fd_set fds;
 				double left = end - get_ts();
 
@@ -239,17 +240,12 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 				tv.tv_usec = (left - tv.tv_sec) * 1000000;
 
 				FD_ZERO(&fds);
+				FD_SET(fd, &fds);
 
 				if (err == SSL_ERROR_WANT_READ)
-				{
-					FD_SET(rfd, &fds);
-					rc = select(rfd + 1, &fds, NULL, NULL, &tv);
-				}
+					rc = select(fd + 1, &fds, NULL, NULL, &tv);
 				else
-				{
-					FD_SET(wfd, &fds);
-					rc = select(wfd + 1, NULL, &fds, NULL, &tv);
-				}
+					rc = select(fd + 1, NULL, &fds, NULL, &tv);
 			}
 			else
 			{
@@ -264,6 +260,9 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 		return -1;
 
 	*ssl_handshake = get_ts() - dstart;
+
+	if (set_fd_blocking(fd) == -1)
+		return -1;
 
 	return 0;
 }

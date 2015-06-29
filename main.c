@@ -1750,7 +1750,7 @@ persistent_loop:
 			if (fd >= 0)
 			{
 				/* set fd blocking */
-				if (set_fd_blocking(fd) == -1)
+				if (set_fd_blocking(fd) == -1) /* FIXME redundant? already in connect_to etc? */
 				{
 					stats_close(&fd, &t_close, 1);
 					break;
