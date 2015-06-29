@@ -1446,13 +1446,13 @@ int main(int argc, char *argv[])
 #ifdef NC
 		if (ncurses_mode)
 		{
-			slow_log(gettext("\nAuto enabling SSL due to https-URL"));
+			slow_log(gettext("\nAuto enabling SSL due to https-URL\n"));
 			update_terminal();
 		}
 		else
 #endif
 		{
-			fprintf(stderr, gettext("Auto enabling SSL due to https-URL"));
+			fprintf(stderr, gettext("Auto enabling SSL due to https-URL\n"));
 		}
 	}
 
