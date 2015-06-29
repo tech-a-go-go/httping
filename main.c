@@ -1805,7 +1805,7 @@ persistent_loop:
 
 #ifndef NO_SSL
 			if (use_ssl)
-				rc = WRITE_SSL(ssl_h, request, req_len);
+				rc = WRITE_SSL(ssl_h, request, req_len, timeout);
 			else
 #endif
 			{
