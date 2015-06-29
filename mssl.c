@@ -1,4 +1,4 @@
-/* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
+/* Released under AGPL v3 with exception for the OpenSSL library. See license.txt */
 #include <errno.h>
 #include <libintl.h>
 #include <string.h>
@@ -187,8 +187,8 @@ int WRITE_SSL(SSL *const ssl_h, const char *wherefrom, int len, const double tim
 
 int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO **const s_bio, const double timeout, double *const ssl_handshake)
 {
-	int dummy = -1;
 	double dstart = get_ts();
+	double end = get_ts() + timeout;
 
 	struct timeval tv;
 	tv.tv_sec  = (long)(timeout / 1000.0);
@@ -213,12 +213,55 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 	*s_bio = BIO_new_socket(fd, BIO_NOCLOSE);
 	SSL_set_bio(*ssl_h, *s_bio, *s_bio);
 
-	dummy = SSL_connect(*ssl_h);
-	if (dummy <= 0)
+	do
 	{
-		set_error(gettext("problem starting SSL connection: %d"), SSL_get_error(*ssl_h, dummy));
-		return -1;
+		int rc = SSL_connect(*ssl_h);
+
+		if (rc <= 0)
+		{
+			int err = SSL_get_error(*ssl_h, rc);
+
+			if (err == SSL_ERROR_WANT_CONNECT || err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE)
+			{
+				struct timeval tv;
+				const int rfd = SSL_get_rfd(*ssl_h);
+				const int wfd = SSL_get_wfd(*ssl_h);
+				fd_set fds;
+				double left = end - get_ts();
+
+				if (left <= 0)
+				{
+					set_error(gettext("Time-out during SSL handshake"));
+					return -1;
+				}
+
+				tv.tv_sec = left;
+				tv.tv_usec = (left - tv.tv_sec) * 1000000;
+
+				FD_ZERO(&fds);
+
+				if (err == SSL_ERROR_WANT_READ)
+				{
+					FD_SET(rfd, &fds);
+					rc = select(rfd + 1, &fds, NULL, NULL, &tv);
+				}
+				else
+				{
+					FD_SET(wfd, &fds);
+					rc = select(wfd + 1, NULL, &fds, NULL, &tv);
+				}
+			}
+			else
+			{
+				set_error(gettext("SSL handshake error: %s"), SSL_get_error(*ssl_h, err));
+				return -1;
+			}
+		}
 	}
+	while (!SSL_is_init_finished(*ssl_h) && !got_sigquit);
+
+	if (got_sigquit)
+		return -1;
 
 	*ssl_handshake = get_ts() - dstart;
 
@@ -299,15 +342,15 @@ int connect_ssl_proxy(const int fd, struct addrinfo *const ai, const double time
 	request_headers_len = snprintf(request_headers, sizeof request_headers, "CONNECT %s:%d HTTP/1.1\r\nUser-Agent: HTTPing v" VERSION \
 			"\r\nProxy-Connection: keep-alive\r\nConnection: keep-alive\r\nHost: %s\r\n", hostname, portnr, hostname);
 
-        if (proxy_user)
-        {
-                char ppa_string[256] = { 0 };
-                char b64_ppa_string[512] = { 0 };
+	if (proxy_user)
+	{
+		char ppa_string[256] = { 0 };
+		char b64_ppa_string[512] = { 0 };
 
-                sprintf(ppa_string, "%s:%s", proxy_user, proxy_password);
-                enc_b64(ppa_string, strlen(ppa_string), b64_ppa_string);
-                request_headers_len += snprintf(&request_headers[request_headers_len], sizeof request_headers - request_headers_len, "Proxy-Authorization: Basic %s\r\n", b64_ppa_string);
-        }
+		sprintf(ppa_string, "%s:%s", proxy_user, proxy_password);
+		enc_b64(ppa_string, strlen(ppa_string), b64_ppa_string);
+		request_headers_len += snprintf(&request_headers[request_headers_len], sizeof request_headers - request_headers_len, "Proxy-Authorization: Basic %s\r\n", b64_ppa_string);
+	}
 
 	request_headers_len += snprintf(&request_headers[request_headers_len], sizeof request_headers - request_headers_len, "\r\n");
 

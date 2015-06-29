@@ -1,4 +1,4 @@
-/* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
+/* Released under AGPL v3 with exception for the OpenSSL library. See license.txt */
 
 ssize_t read_to(int fd, char *whereto, size_t len, double timeout);
 ssize_t myread(int fd, char *whereto, size_t len, double timeout);

@@ -1,4 +1,4 @@
-/* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
+/* Released under AGPL v3 with exception for the OpenSSL library. See license.txt */
 
 #define _GNU_SOURCE
 #include <sys/ioctl.h>
@@ -638,7 +638,7 @@ time_t parse_date_from_response_headers(const char *in)
 		struct tm tm;
 		memset(&tm, 0x00, sizeof tm);
 
-		/* 22 Feb 2013 09:13:56 */
+		/* 22 Feb 2015 09:13:56 */
 		if (strptime(komma + 1, "%d %b %Y %H:%M:%S %Z", &tm))
 			return mktime(&tm);
 	}
@@ -659,7 +659,7 @@ int calc_page_age(const char *in, const time_t their_ts)
 			struct tm tm;
 			memset(&tm, 0x00, sizeof tm);
 
-			/* 22 Feb 2013 09:13:56 */
+			/* 22 Feb 2015 09:13:56 */
 			if (strptime(komma + 1, "%d %b %Y %H:%M:%S %Z", &tm))
 				age = their_ts - mktime(&tm);
 		}

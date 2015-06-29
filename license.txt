@@ -1,6 +1,6 @@
-HTTPing is (C) 2003-2013 by folkert@vanheusden.com
+HTTPing is (C) 2003-2015 by folkert@vanheusden.com
 
-The GPL version 2 applies to this program. That document can be found
+The AGPL version 3 applies to this program. That document can be found
 on the website of the free software foundation.
 
   In addition, as a special exception, the copyright holder gives

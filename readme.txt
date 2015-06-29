@@ -41,7 +41,7 @@ Many thanks to Olaf van der Spek for lots of bug-reports, testing, ideas and sug
 
 
 For everything more or less related to 'httping', please feel free
-to contact me on: folkert@vanheusden.com
+to contact me on: mail@vanheusden.com
 
 Please support my opensource development: http://www.vanheusden.com/wishlist.php
 Or send any surplus bitcoins to 1N5Sn4jny4xVwTwSYLnf7WnFQEGoVRmTQF

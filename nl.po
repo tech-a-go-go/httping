@@ -1,15 +1,15 @@
 # Dutch translations for HTTPing package.
-# Copyright (C) 2013 folkert van heusden
+# Copyright (C) 2015 folkert van heusden
 # This file is distributed under the same license as the HTTPing package.
-# folkert van heusden <folkert@vanheusden.com>, 2013.
+# folkert van heusden <mail@vanheusden.com>, 2015.
 # Translated by Joris Zwart - http://joriszwart.nl/
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: HTTPing\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-04 15:29+0200\n"
-"PO-Revision-Date: 2013-05-04 18:41+0100\n"
+"POT-Creation-Date: 2015-05-04 15:29+0200\n"
+"PO-Revision-Date: 2015-05-04 18:41+0100\n"
 "Last-Translator: Joris Zwart <hallo@joriszwart.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"

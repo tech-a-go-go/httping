@@ -1,4 +1,4 @@
-/* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
+/* Released under AGPL v3 with exception for the OpenSSL library. See license.txt */
 
 #ifndef __GEN_H__
 #define __GEN_H__
