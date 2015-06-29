@@ -1,4 +1,3 @@
-/* $Revision$ */
 #include <libintl.h>
 #include <math.h>
 #include <stdlib.h>

@@ -1,5 +1,4 @@
 /* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
-/* $Revision$ */
 
 #ifndef __GEN_H__
 #define __GEN_H__

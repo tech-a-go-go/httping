@@ -1,5 +1,4 @@
 /* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
-/* $Revision$ */
 
 #include <netdb.h>
 #include <netinet/in.h>

@@ -1,5 +1,4 @@
 /* Released under GPLv2 with exception for the OpenSSL library. See license.txt */
-/* $Revision: 278 $ */
 
 #define _GNU_SOURCE
 #include <sys/ioctl.h>

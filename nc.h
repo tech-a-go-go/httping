@@ -1,4 +1,3 @@
-/* $Revision$ */
 #include <ncurses.h>
 
 extern char win_resize;

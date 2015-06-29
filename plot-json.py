@@ -1,7 +1,5 @@
 #! /usr/bin/python
 
-# $Revision$
-
 import sys
 import json
 import os

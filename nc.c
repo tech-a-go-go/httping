@@ -1,4 +1,3 @@
-/* $Revision$ */
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <libintl.h>

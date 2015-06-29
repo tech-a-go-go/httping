@@ -3,7 +3,7 @@
 FILE=`mktemp`
 FILE2=`mktemp`
 
-echo \*\*\* HTTPing v`grep VERSION version | cut -d = -f 2` \(`echo $Revision$ | awk '{ print $2; }'`\) configure script \*\*\*
+echo \*\*\* HTTPing v`grep VERSION version | cut -d = -f 2` configure script \*\*\*
 echo
 
 if [ -z "$CC" ]
