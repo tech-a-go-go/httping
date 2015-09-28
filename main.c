@@ -1819,6 +1819,7 @@ persistent_loop:
 			   e.g. until the transmitbuffers are empty and the data was
 			   sent to the next hop
 			 */
+			 #ifndef __CYGWIN__
 			for(;;)
 			{
 				int bytes_left = 0;
@@ -1837,6 +1838,7 @@ persistent_loop:
 				 */
 				usleep(write_sleep);
 			}
+			#endif
 
 			dafter_write_complete = get_ts();
 
