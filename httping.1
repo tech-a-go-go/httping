@@ -61,7 +61,7 @@ Do a GET request instead of a HEAD request: this means that also the complete pa
 This selects the url to probe. E.g.: http://localhost/
 .TP
 .B "\-h hostname"
-Instead of '\-g' one can also set a hostname to probe with -h: -h localhost
+Instead of '\-g' one can also set a hostname to probe with \-h: \-h localhost
 .TP
 .B "\-I str"
 UserAgent-string to send to the webserver (instead of 'HTTPing <version>').
@@ -91,7 +91,7 @@ Switches HTTPing to Nagios-plugin mode 1: return exitcode '1' when the average r
 This selects the HTTP status-codes which are regarded as an OK-state (only with '\-m').
 .TP
 .B "\-p portnumber"
--p can be used together with \-h. \-p selects the portnumber to probe.
+\-p can be used together with \-h. \-p selects the portnumber to probe.
 .TP
 .B "\-q"
 Be quiet, only return an exit-code.
@@ -124,7 +124,7 @@ Increase verbosity mode. To show standard deviation and dates in output.
 Do not abort program if resolving fails.
 .TP
 .B "\-X"
-Use this switch together with '-G'. For each "ping" show the amount of data transferred (excluding the headers).
+Use this switch together with '\-G'. For each "ping" show the amount of data transferred (excluding the headers).
 .TP
 .B "\-x proxyhost[:port]
 Probe using a proxyserver. Note that you're also measuring the latency of the proxyserver!
@@ -163,7 +163,7 @@ When the server sends a cookie, it will be returned in the next request.
 Maximum MTU to use. Cannot be larger than network interface MTU.
 .TP
 .B "\-\-no\-host\-header"
-Do not put a "Host:"-header in the request header.
+Do not put a "Host:"\-header in the request header.
 .TP
 .B "\-\-no\-tcp\-nodelay"
 Do not disable "tcp delay" (Naggle).
@@ -190,16 +190,16 @@ Set the size of the receive buffer (in bytes).
 When the duration is x or more, show ping line in the slow log window (the middle window).
 .TP
 .B "\-\-threshold\-red x"
-If the measured threshold is higher than x (and -Y is given), then the shown value is colored red. If you also use --threshold-yellow, then this value must be bigger.
+If the measured threshold is higher than x (and \-Y is given), then the shown value is colored red. If you also use \-\-threshold\-yellow, then this value must be bigger.
 .TP
 .B "\-\-threshold\-yellow x"
-If the measured threshold is higher than x (and -Y is given), then the shown value is colored yellow.
+If the measured threshold is higher than x (and \-Y is given), then the shown value is colored yellow.
 .TP
 .B "\-\-threshold\-show x"
 If the measured threshold is higher than x, then the result is shown (default is show always). The value x is in ms.
 .TP
 .B "\-\-timestamp" or "\-\-ts"
-Put a timestamp before the result-lines. Use -v to also show a date.
+Put a timestamp before the result-lines. Use \-v to also show a date.
 .TP
 .B "\-\-tx-buffer x"
 Set the size of the transmit buffer (in bytes).
@@ -208,10 +208,10 @@ Set the size of the transmit buffer (in bytes).
 Show the version and exit.
 
 .SH OUTPUT
-In split mode (-S) something like "time=0.08+24.09+23.17+15.64+0.02=62.98 ms" is shown. The first value is the time it took to resolve the hostname (or 'n/a' if it did not resolve in this iteration, e.g. in "resolve once" (-r) mode), then the time it took to connect (or -1 for example in persistent connection (-Q, HTTP v1.1), after that the time it took to put the request on the wire, then the time it took for the HTTP server to process the request and send it back and lastly the time it took to close the connection.
+In split mode (\-S) something like "time=0.08+24.09+23.17+15.64+0.02=62.98 ms" is shown. The first value is the time it took to resolve the hostname (or 'n/a' if it did not resolve in this iteration, e.g. in "resolve once" (\-r) mode), then the time it took to connect (or \-1 for example in persistent connection (\-Q, HTTP v1.1), after that the time it took to put the request on the wire, then the time it took for the HTTP server to process the request and send it back and lastly the time it took to close the connection.
 
 .SH GRAPH
-The graph in the ncurses uses colors to encode a meaning. Green: value is less than 1 block. Red: the value did not fit in the graph. Blue: the value was limitted by --graph-limit. Cyan: no measurement for that point in time.
+The graph in the ncurses uses colors to encode a meaning. Green: value is less than 1 block. Red: the value did not fit in the graph. Blue: the value was limitted by \-\-graph\-limit. Cyan: no measurement for that point in time.
 
 .SH KEYS
 Press <CTRL> + <c> to exit the program. It will display a summary of what was measured.

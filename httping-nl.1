@@ -73,7 +73,7 @@ Hoeveel seconden (of delen daarvan) te wachten tussen het verzenden van iedere p
 Gebruik de ncurses gebruikers interface.
 .TP
 .B "\-L x"
-In combinatie met -G zet dit een limiet op hoeveel data er binnengehaald wordt.
+In combinatie met \-G zet dit een limiet op hoeveel data er binnengehaald wordt.
 .TP
 .B "\-l"
 Maak een SSL verbinding. Dit vereist een https-URL.
@@ -199,7 +199,7 @@ Toon metingen in geel als de gemeten waarde meer dan x is.
 Toon metingen alleen als ze hoger dan x zijn.
 .TP
 .B "\-\-timestamp" or "\-\-ts"
-Voeg een een tijdstempel toe aan de uitvoer. Gebruik -v om ook een datum te zien en \-vv om ook microseconden te zien.
+Voeg een een tijdstempel toe aan de uitvoer. Gebruik \-v om ook een datum te zien en \-vv om ook microseconden te zien.
 .TP
 .B "\-\-tx-buffer x"
 Configureer de grootte van de zend-buffer.
@@ -208,10 +208,10 @@ Configureer de grootte van de zend-buffer.
 Toon versie informatie.
 
 .SH UITVOER
-In de -S mode zal iets als "tijd=0.08+24.09+23.17+15.64+0.02=62.98 ms" getoond worden. De eerste waarde is hoe lang het duurde om de systeem naam te vertalen, de 2e waarde hoe lang het duurde om te verbinden, de 3e waarde geeft aan hoe lang het duurde om het verzoek te verzenden en de 4e waarde is hoelang het duurde voordat de http-server een antwoord formuleerde en terugzond. de 5e waarde geeft aan hoelang het duurde om de socket te sluiten.
+In de \-S mode zal iets als "tijd=0.08+24.09+23.17+15.64+0.02=62.98 ms" getoond worden. De eerste waarde is hoe lang het duurde om de systeem naam te vertalen, de 2e waarde hoe lang het duurde om te verbinden, de 3e waarde geeft aan hoe lang het duurde om het verzoek te verzenden en de 4e waarde is hoelang het duurde voordat de http-server een antwoord formuleerde en terugzond. de 5e waarde geeft aan hoelang het duurde om de socket te sluiten.
 
 .SH GRAFIEK
-De grafiek in ncurses mode gebruikt een aantal kleuren. Groen: de waarde is minder dan de ondergrens. Rood: de waarde is hoger dan de bovengrens. Blauw: de waarde is gelimiteerd door '--graph-limit'. Cyaan: er is geen meetwaarde.
+De grafiek in ncurses mode gebruikt een aantal kleuren. Groen: de waarde is minder dan de ondergrens. Rood: de waarde is hoger dan de bovengrens. Blauw: de waarde is gelimiteerd door '\-\-graph\-limit'. Cyaan: er is geen meetwaarde.
 
 .SH TOETSEN
 Druk <CTRL> + <c> om het programma af te breken. Er zal dan een samenvatting getoond worden.
