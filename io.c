@@ -39,7 +39,7 @@ ssize_t read_to(int fd, char *whereto, size_t len, double timeout)
 			if (errno == EINTR)
 				return RC_CTRLC;
 
-			set_error(gettext("myread::select failed: %s"), strerror(errno));
+			set_error(gettext("read_to::select failed: %s"), strerror(errno));
 
 			return RC_SHORTREAD;
 		}
