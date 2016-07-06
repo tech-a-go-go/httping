@@ -1414,9 +1414,6 @@ int main(int argc, char *argv[])
 	if (!(get_instead_of_head || use_ssl) && show_Bps)
 		error_exit(gettext("-b/-B can only be used when also using -G (GET instead of HEAD) or -l (use SSL)\n"));
 
-	if (use_tfo && use_ssl)
-		error_exit(gettext("TCP Fast open and SSL not supported together\n"));
-
 	if (colors)
 		set_colors(ncurses_mode);
 
@@ -1454,6 +1451,9 @@ int main(int argc, char *argv[])
 			fprintf(stderr, gettext("Auto enabling SSL due to https-URL\n"));
 		}
 	}
+
+	if (use_tfo && use_ssl)
+		error_exit(gettext("TCP Fast open and SSL not supported together\n"));
 
 	if (verbose)
 	{
