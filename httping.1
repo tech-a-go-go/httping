@@ -99,6 +99,9 @@ Be quiet, only return an exit-code.
 .B "\-R str"
 Referer-string to send to the webserver.
 .TP
+.B "\-Q"
+Use a persistent connection, i.e. reuse the same TCP connection for multiple HTTP requests. Usually possible when 'Connection: Keep-Alive' is sent by server. Adds a 'C' to the output if httping had to reconnect.
+.TP
 .B "\-r"
 Only resolve the hostname once: this takes the resolving out of the loop so that the latency of the DNS is not measured. Also useful when you want to measure only 1 webserver while the DNS returns a different ip-address for each resolve ('roundrobin').
 .TP
