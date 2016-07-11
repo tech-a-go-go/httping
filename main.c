@@ -1035,8 +1035,8 @@ int main(int argc, char *argv[])
 	bps.Bps_avg = 0;
 
 	setlocale(LC_ALL, "");
-	bindtextdomain("HTTPing", LOCALEDIR);
-	textdomain("HTTPing");
+	bindtextdomain("httping", LOCALEDIR);
+	textdomain("httping");
 
 	init_statst(&t_resolve);
 	init_statst(&t_connect);

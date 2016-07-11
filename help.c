@@ -210,7 +210,7 @@ void usage(const char *me)
 	format_help(NULL, "--divert-connect", gettext("connect to a different host than in the URL given"));
 	format_help(NULL, "--keep-cookies", gettext("return the cookies given by the HTTP server in the following request(s)"));
 	format_help(NULL, "--no-host-header", gettext("do not add \"Host:\"-line to the request headers"));
-	format_help("-Q", "--persistent-connections", gettext("use a persistent connection. adds a 'C' to the output if httping had to reconnect"));
+	format_help("-Q", "--persistent-connections", gettext("use a persistent connection, i.e. reuse the same TCP connection for multiple HTTP requests. usually possible when 'Connection: Keep-Alive' is sent by server. adds a 'C' to the output if httping had to reconnect"));
 	format_help("-I x", "--user-agent", gettext("use 'x' for the UserAgent header"));
 	format_help("-R x", "--referer", gettext("use 'x' for the Referer header"));
 	format_help(NULL, "--header", gettext("adds an extra request-header"));

@@ -93,6 +93,9 @@ Selecteer de HTTP status-codes die als 'ok' beschouwd worden.
 .B "\-p portnumber"
 Gebruik dit on combinatie met h. Het zet het port-nummer om te pingen.
 .TP
+.B "\-Q"
+Gebruik een blijvende verbinding, dat wil zeggen hergebruiken dezelfde TCP-verbinding voor meerdere HTTP-verzoeken. Meestal mogelijk wanneer 'Connection: Keep-Alive' is verzonden door de server. Als het bestemmingssysteem de verbinding verbroken heeft, dan zal HTTPing een \"C\" toevoegen aan de uitvoer.
+.TP
 .B "\-q"
 Geef geen uitvoer, alleen een teruggave code.
 .TP

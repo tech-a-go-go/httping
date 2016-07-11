@@ -187,8 +187,8 @@ msgid "do not add \"Host:\"-line to the request headers"
 msgstr "voeg geen \"Host:\"-regel in het verbindingsverzoek"
 
 #: help.c:212
-msgid "use a persistent connection. adds a 'C' to the output if httping had to reconnect"
-msgstr "gebruik een blijvende verbinding. als het bestemmingssysteem de verbinding verbroken heeft, dan zal HTTPing een \"C\" toevoegen aan de uitvoer"
+msgid "use a persistent connection, i.e. reuse the same TCP connection for multiple HTTP requests. usually possible when 'Connection: Keep-Alive' is sent by server. adds a 'C' to the output if httping had to reconnect"
+msgstr "gebruik een blijvende verbinding, dat wil zeggen hergebruiken dezelfde TCP-verbinding voor meerdere HTTP-verzoeken. meestal mogelijk wanneer 'Connection: Keep-Alive' is verzonden door de server. als het bestemmingssysteem de verbinding verbroken heeft, dan zal HTTPing een \"C\" toevoegen aan de uitvoer"
 
 #: help.c:213
 msgid "use 'x' for the UserAgent header"
