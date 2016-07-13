@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: HTTPing\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-04 15:29+0200\n"
-"PO-Revision-Date: 2015-05-04 18:41+0100\n"
+"PO-Revision-Date: 2016-07-13 16:00+1100\n"
 "Last-Translator: Way, No <noway@2ch.hk>\n"
 "Language-Team: Russian\n"
-"Language: nl\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : ((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2);\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 
@@ -38,11 +38,11 @@ msgstr "Сообщение об ошибке '%s' урезано."
 
 #: fft.c:21
 msgid "failed allocating memory for fft (1)"
-msgstr "не удалось выделить память для 'fft (1)'."
+msgstr "не удалось выделить память для fft (1)."
 
 #: fft.c:25
 msgid "failed allocating memory for fft (2)"
-msgstr "не удалось выделить память для 'fft (2)'."
+msgstr "не удалось выделить память для fft (2)."
 
 #: fft.c:30
 msgid "failed calculating plan for fft"
@@ -51,7 +51,7 @@ msgstr "не удалось вычислить план для fft."
 #: help.c:77
 #, c-format
 msgid "HTTPing v"
-msgstr "HTTPing версия "
+msgstr "HTTPing версия"
 
 msgid "adds an extra request-header"
 msgstr "добавляет дополнительный заголовок запроса"
@@ -59,22 +59,22 @@ msgstr "добавляет дополнительный заголовок за�
 #: help.c:79
 #, c-format
 msgid " * SSL support included (-l)\n"
-msgstr " * SSL поддержка добавлена (-l)\n"
+msgstr " * SSL поддержка включена (-l)\n"
 
 #: help.c:84
 #, c-format
 msgid " * ncurses interface with FFT included (-K)\n"
-msgstr " * ncurses интерфейс с FFT добавлен (-K)\n"
+msgstr " * ncurses интерфейс с FFT включен (-K)\n"
 
 #: help.c:86
 #, c-format
 msgid " * ncurses interface included (-K)\n"
-msgstr " * ncurses интерфейс добавлен (-K)\n"
+msgstr " * ncurses интерфейс включен (-K)\n"
 
 #: help.c:91
 #, c-format
 msgid " * TFO (TCP fast open) support included (-F)\n"
-msgstr " * TFO (TCP fast open) поддержкка добавлена' (-F)\n"
+msgstr " * TFO (TCP fast open) поддержкка включена' (-F)\n"
 
 #: help.c:93
 #: help.c:293
@@ -97,7 +97,7 @@ msgstr "имя хоста для пинга (к примеру, localhost) - и�
 
 #: help.c:179
 msgid "portnumber (e.g. 80) - use with -h"
-msgstr "номер порта (к примеру,. 80), используется с -h"
+msgstr "номер порта (к примеру, 80), используется с -h"
 
 #: help.c:180
 msgid "use IPv6 when resolving/connecting"
@@ -105,7 +105,7 @@ msgstr "использовать IPv6 для резолва/подключени
 
 #: help.c:182
 msgid "connect using SSL. pinging an https URL automatically enables this setting"
-msgstr "подключаться с SSL. пингуя https URL эта опция включается автоматически"
+msgstr "подключаться с SSL. при пинге https URL эта опция включается автоматически"
 
 #: help.c:187
 #, c-format
@@ -114,7 +114,7 @@ msgstr " *** насттройки proxy ***\n"
 
 #: help.c:188
 msgid "x should be \"host:port\" which are the network settings of the http/https proxy server. ipv6 ip-address should be \"[ip:address]:port\""
-msgstr "x должен быть \"host:port\", что является настройками сети http/https прокси сервера. ipv6 айпи адрес должен быть в формате \"[ip:adres]:port\""
+msgstr "x должен быть \"host:port\", т.е. сетевыми настройками http/https прокси сервера. ipv6 адрес должен быть в формате \"[ip:adres]:port\""
 
 #: help.c:189
 msgid "fetch proxy settings from environment variables"
@@ -134,11 +134,11 @@ msgstr "читать парооль для прокси аутентификац
 
 #: help.c:193
 msgid "proxy is a socks5 server"
-msgstr "прокси - socks5 сервер"
+msgstr "прокси является socks5 сервером"
 
 #: help.c:194
 msgid "adds \"&x=[random value]\" to the request URL"
-msgstr "добавляет \"&x=[willekeurig getal]\" к URL запроса"
+msgstr "добавляет \"&x=[случайное значение]\" к URL запроса"
 
 #: help.c:198
 #, c-format
@@ -155,11 +155,11 @@ msgstr "задержка между каждым пингом"
 
 #: help.c:201
 msgid "timeout (default: 30s)"
-msgstr "таймаут (по дефолту: 30 секунд)"
+msgstr "таймаут (по умолчанию: 30 секунд)"
 
 #: help.c:202
 msgid "execute pings at multiples of interval relative to start, automatically enabled in ncurses output mode"
-msgstr "выполнять пинги пропорционально интервалам от старта, автоматически включено в ncurses режиме вывода"
+msgstr "выполнять пинги пропорционально интервалам относительно начала, автоматически включено в ncurses режиме вывода"
 
 #: help.c:203
 msgid "flood connect (no delays)"
@@ -176,7 +176,7 @@ msgstr "просить все прокси по пути не кэшироват
 
 #: help.c:209
 msgid "connect to a different host than in the URL given"
-msgstr "подключиться к другому хосту, отличному от данного URL"
+msgstr "подключиться к другому хосту, отличному от данного в URL"
 
 #: help.c:210
 msgid "return the cookies given by the HTTP server in the following request(s)"
@@ -184,11 +184,11 @@ msgstr "возвращать куки выданные HTTP сервером в 
 
 #: help.c:211
 msgid "do not add \"Host:\"-line to the request headers"
-msgstr "voeg geen \"Host:\"-regel in het verbindingsverzoek"
+msgstr "не добавлять \"Host:\" строку к загловоку запроса"
 
 #: help.c:212
-msgid "use a persistent connection. adds a 'C' to the output if httping had to reconnect"
-msgstr "использовать постоянное соединение. добавляет 'C' в вывод если httping был вынужден переподключиться"
+msgid "use a persistent connection, i.e. reuse the same TCP connection for multiple HTTP requests. usually possible when 'Connection: Keep-Alive' is sent by server. adds a 'C' to the output if httping had to reconnect"
+msgstr "использовать постоянное соединение, т.е. переиспользовать то же самое TCP соединение для несколько HTTP запросов. обычно возможно когда 'Connection: Keep-Alive' отправлено сервером. добавляет 'C' в вывод если httping был вынужден переподключиться"
 
 #: help.c:213
 msgid "use 'x' for the UserAgent header"
@@ -221,7 +221,7 @@ msgstr "передавать размер буффера"
 
 #: help.c:223
 msgid "resolve hostname only once (useful when pinging roundrobin DNS: also takes the first DNS lookup out of the loop so that the first measurement is also correct)"
-msgstr "резолвить имя хоста только один раз (полезно, когда пингуется roundrobin DNS: также берет первый DNS ответ из цикла таким образом, что первое измерение тоже корректно)"
+msgstr "резолвить имя хоста только один раз (полезно, когда пингуется roundrobin DNS: также берется первый DNS ответ из цикла таким образом, что первое измерение тоже корректно)"
 
 #: help.c:224
 msgid "do not abort the program if resolving failed: keep retrying"
@@ -275,7 +275,7 @@ msgstr "показывать коды ответа"
 
 #: help.c:244
 msgid "split measured time in its individual components (resolve, connect, send, etc."
-msgstr "разделять замеренное время на индивидуальные компоненты (резолв, подключение, отправка и т.п.)"
+msgstr "разделять замеренное время на индивидуальные составляющие (резолв, подключение, отправка и т.п.)"
 
 #: help.c:245
 msgid "from what ping value to show the value in red (must be bigger than yellow), only in color mode (-Y)"
@@ -316,7 +316,7 @@ msgstr "делать GET запрос вместо HEAD запроса (чита
 
 #: help.c:259
 msgid "show transfer speed in KB/s (use with -G)"
-msgstr "показывать скорость передачи в KB/s (используется с -G)"
+msgstr "показывать скорость передачи в КБ/с (используется с -G)"
 
 #: help.c:260
 msgid "like -b but use compression if available"
@@ -328,7 +328,7 @@ msgstr "ограничить количество переданных данн�
 
 #: help.c:262
 msgid "show the number of KB transferred (for -b)"
-msgstr "показывать количество перданных данных в KB (для -b)"
+msgstr "показывать количество перданных данных в КБ (для -b)"
 
 #: help.c:266
 #, c-format
@@ -341,7 +341,7 @@ msgstr "тихий режим, возвращать только код возв
 
 #: help.c:268
 msgid "give machine parseable output (see also -o and -e)"
-msgstr "выдавать машинно-интерпретируемый вывод (смотрите также -o и -e)"
+msgstr "выдавать машинночитаемый вывод (смотрите также -o и -e)"
 
 #: help.c:269
 msgid "json output, cannot be combined with -m"
@@ -349,7 +349,7 @@ msgstr "json вывод, не может быть использовано вм�
 
 #: help.c:270
 msgid "what http results codes indicate 'ok' comma separated WITHOUT spaces inbetween default is 200, use with -e"
-msgstr "какие HTTP коды ответа считать за 'ok'. разделять запятыми БЕЗ пробелов, по дефолту 200, использовать вместе с -e"
+msgstr "какие HTTP коды ответа считать за 'ok'. разделять запятыми БЕЗ пробелов, по умолчанию 200, использовать вместе с -e"
 
 #: help.c:271
 msgid "string to display when http result code doesn't match"
@@ -390,7 +390,7 @@ msgstr "рисовать фазу (преобразование Фурье) в G
 
 #: help.c:286
 msgid "when the duration is x or more, show ping line in the slow log window (the middle window)"
-msgstr "когда длительно больше или равна x, показывать строку пинга в окне медленного лога (среднее окно)"
+msgstr "когда длительность больше или равна x, показывать строку пинга в окне медленного лога (среднее окно)"
 
 #: help.c:287
 msgid "do not scale to values above x"
@@ -407,7 +407,7 @@ msgstr "показывать версию"
 #: help.c:305
 #, c-format
 msgid "Voorbeeld:\n"
-msgstr "Пример"
+msgstr "Пример:\n"
 
 #: io.c:43
 #: io.c:78
@@ -491,7 +491,7 @@ msgstr "/sd"
 #: main.c:576
 #: main.c:575
 msgid "-n: missing parameter\n"
-msgstr "-n: отсутствующий параметр \n"
+msgstr "-n: отсутствующий параметр\n"
 
 #: main.c:594
 #: main.c:603
@@ -546,13 +546,13 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-" *** -A is больше не требуется ***\n"
+" *** -A больше не требуется ***\n"
 "\n"
 
 #: main.c:1170
 #: main.c:1165
 msgid "-i cannot have a value smaller than zero"
-msgstr "-i нельзя иметь значение меньше нуля"
+msgstr "-i не может иметь значение меньше нуля"
 
 #: main.c:1224
 #: main.c:1232
@@ -602,12 +602,12 @@ msgstr "Нельзя совместить -m, -M и -K"
 #: main.c:1294
 #: main.c:1289
 msgid "Aggregates can only be used in non-machine/json-output mode"
-msgstr "Вывод совокупностей может быть только использовано в немашинночитаемом/json-вывод режиме"
+msgstr "Вывод совокупностей может быть только использован в немашинночитаемом/json-вывод режиме"
 
 #: main.c:1299
 #: main.c:1294
 msgid "-b/-B can only be used when also using -G (GET instead of HEAD) or -l (use SSL)\n"
-msgstr "-b/-B kunnen alleen gebruikt worden ism -G or -l\n"
+msgstr "-b/-B может быть использован только при использовании -G (GET вместо HEAD) или -l (использовать SSL)\n"
 
 #: main.c:1302
 #: main.c:1297
@@ -621,13 +621,13 @@ msgid ""
 "Auto enabling SSL due to https-URL"
 msgstr ""
 "\n"
-"Автоматически включаем SSL из-за https-URL"
+"Автоматически включаем SSL ввиду https URL"
 
 #: main.c:1338
 #: main.c:1333
 #, c-format
 msgid "Auto enabling SSL due to https-URL"
-msgstr "Автоматически включаем SSL из-за https-URL"
+msgstr "Автоматически включаем SSL ввиду https-URL"
 
 #: main.c:1347
 #: main.c:1342
@@ -702,13 +702,13 @@ msgstr "Валидный IPv4 или IPv6 адрес не найден для %s
 #: main.c:1579
 #: main.c:1574
 msgid "Will no longer inform about request headers too large."
-msgstr "Больше не сообщать о слишком больших заголовках запроса"
+msgstr "Больше не сообщать о слишком больших заголовках запроса."
 
 #: main.c:1581
 #: main.c:1576
 #, c-format
 msgid "Request headers > 4KB! (%d bytes) This may give failures with some HTTP servers."
-msgstr "Заголовок запроса > 4KB! (%d байт) Это может привести к ошибке на некоторых HTTP серверах."
+msgstr "Заголовок запроса > 4КБ! (%d байт) Это может привести к ошибке на некоторых HTTP серверах."
 
 #: main.c:1685
 #: main.c:1680
@@ -730,7 +730,7 @@ msgstr "таймаут при отправке к хосту"
 #: main.c:1752
 #: main.c:1747
 msgid "retrieved invalid data from host"
-msgstr "получены неправильные данных от хоста"
+msgstr "получены неправильные данные от хоста"
 
 #: main.c:1756
 #: main.c:1751
@@ -777,7 +777,7 @@ msgid ""
 "HTTP server sent more data than just the response headers"
 msgstr ""
 "\n"
-"HTTP сервер отправил больше данных чем просто заголовков ответа"
+"HTTP сервер отправил больше данных сверх заголовков ответа"
 
 #: main.c:1878
 #: main.c:1873
@@ -904,7 +904,7 @@ msgstr "туда-сюда мин/сред/макс%s = %s%.1f%s/%s%.1f%s/%s%.1f%
 #: main.c:2300
 #, c-format
 msgid "Transfer speed: min/avg/max = %s%f%s/%s%f%s/%s%f%s KB\n"
-msgstr "Скорость передачи: мин/сред/макс = %s%f%s/%s%f%s/%s%f%s KB\n"
+msgstr "Скорость передачи: мин/сред/макс = %s%f%s/%s%f%s/%s%f%s КБ\n"
 
 #: mssl.c:79
 #, c-format
@@ -1042,7 +1042,7 @@ msgstr "TCP RTT"
 
 #: nc.c:775
 msgid "headers"
-msgstr "заголовки   "
+msgstr "заголовки"
 
 #: nc.c:782
 #, c-format
@@ -1080,7 +1080,7 @@ msgstr ""
 #: res.c:36
 #, c-format
 msgid "Resolving %s %sfailed: %s"
-msgstr "Резолвим %s %sне удалось: %s"
+msgstr "Резолв %s %sне удался: %s"
 
 #: res.c:36
 msgid "(IPv6) "
@@ -1094,7 +1094,7 @@ msgstr "Проблема при резолве %s (IPv4): %s"
 #: socks5.c:56
 #, c-format
 msgid "socks5connect: reply with requested authentication method does not say version 5 (%02x)"
-msgstr "socks5connect: ответ с запрошенным аутентификационных методом не выдает версию 5 (%02x)"
+msgstr "socks5connect: ответ с запрошенным аутентификационным методом не выдает версию 5 (%02x)"
 
 #: socks5.c:70
 #, c-format
@@ -1120,7 +1120,7 @@ msgstr "socks5connect: аутентификация по паролю не уд�
 #: socks5.c:116
 #, c-format
 msgid "Cannot resolve %s"
-msgstr "Не получается зарезолвить %s"
+msgstr "Не получается резолв %s"
 
 #: socks5.c:133
 msgid "socks5connect: failed to transmit associate request"
@@ -1193,7 +1193,7 @@ msgstr "не удалось установить TOS информацию"
 #: tcp.c:165
 #, c-format
 msgid "TCP TFO Not Supported. Please check if \"/proc/sys/net/ipv4/tcp_fastopen\" is 1. Disabling TFO for now.\n"
-msgstr "TCP TFO не поддерживается. Пожалуйста проверте равняется ли \"/proc/sys/net/ipv4/tcp_fastopen\" единице. Отключаем TFO пока что. \n"
+msgstr "TCP TFO не поддерживается. Пожалуйста проверьте равняется ли \"/proc/sys/net/ipv4/tcp_fastopen\" единице. Пока что, отключаем TFO. \n"
 
 #: tcp.c:195
 #, c-format
