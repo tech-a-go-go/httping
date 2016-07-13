@@ -74,7 +74,7 @@ msgstr " * ncurses интерфейс включен (-K)\n"
 #: help.c:91
 #, c-format
 msgid " * TFO (TCP fast open) support included (-F)\n"
-msgstr " * TFO (TCP fast open) поддержкка включена' (-F)\n"
+msgstr " * TFO (TCP fast open) поддержка включена' (-F)\n"
 
 #: help.c:93
 #: help.c:293
@@ -110,11 +110,11 @@ msgstr "подключаться с SSL. при пинге https URL эта оп
 #: help.c:187
 #, c-format
 msgid " *** proxy settings ***\n"
-msgstr " *** насттройки proxy ***\n"
+msgstr " *** настройки proxy ***\n"
 
 #: help.c:188
 msgid "x should be \"host:port\" which are the network settings of the http/https proxy server. ipv6 ip-address should be \"[ip:address]:port\""
-msgstr "x должен быть \"host:port\", т.е. сетевыми настройками http/https прокси сервера. ipv6 адрес должен быть в формате \"[ip:adres]:port\""
+msgstr "x должен быть \"host:port\", т.е. сетевыми настройками http/https прокси сервера. ipv6 адрес должен быть в формате \"[ip:address]:port\""
 
 #: help.c:189
 msgid "fetch proxy settings from environment variables"
@@ -130,7 +130,7 @@ msgstr "пароль для прокси аутентификации"
 
 #: help.c:192
 msgid "read password for proxy authentication from file x"
-msgstr "читать парооль для прокси аутентификации из файла x"
+msgstr "читать пароль для прокси аутентификации из файла x"
 
 #: help.c:193
 msgid "proxy is a socks5 server"
@@ -147,7 +147,7 @@ msgstr " *** настройки времени ***\n"
 
 #: help.c:199
 msgid "how many times to ping"
-msgstr "сколько раз пинговать"
+msgstr "сколько раз исполнять пинг"
 
 #: help.c:200
 msgid "delay between each ping"
@@ -155,7 +155,7 @@ msgstr "задержка между каждым пингом"
 
 #: help.c:201
 msgid "timeout (default: 30s)"
-msgstr "таймаут (по умолчанию: 30 секунд)"
+msgstr "тайм-аут (по умолчанию: 30 секунд)"
 
 #: help.c:202
 msgid "execute pings at multiples of interval relative to start, automatically enabled in ncurses output mode"
@@ -184,7 +184,7 @@ msgstr "возвращать куки выданные HTTP сервером в 
 
 #: help.c:211
 msgid "do not add \"Host:\"-line to the request headers"
-msgstr "не добавлять \"Host:\" строку к загловоку запроса"
+msgstr "не добавлять \"Host:\" строку к заголовку запроса"
 
 #: help.c:212
 msgid "use a persistent connection, i.e. reuse the same TCP connection for multiple HTTP requests. usually possible when 'Connection: Keep-Alive' is sent by server. adds a 'C' to the output if httping had to reconnect"
@@ -213,15 +213,15 @@ msgstr "не отключать алгоритм Naggle"
 
 #: help.c:221
 msgid "receive buffer size"
-msgstr "получать размер буффера"
+msgstr "получать размер буфера"
 
 #: help.c:222
 msgid "transmit buffer size"
-msgstr "передавать размер буффера"
+msgstr "передавать размер буфера"
 
 #: help.c:223
 msgid "resolve hostname only once (useful when pinging roundrobin DNS: also takes the first DNS lookup out of the loop so that the first measurement is also correct)"
-msgstr "резолвить имя хоста только один раз (полезно, когда пингуется roundrobin DNS: также берется первый DNS ответ из цикла таким образом, что первое измерение тоже корректно)"
+msgstr "резолвить имя хоста только один раз (полезно, когда пингуется round robin DNS: также берется первый DNS ответ из цикла таким образом, что первое измерение тоже корректно)"
 
 #: help.c:224
 msgid "do not abort the program if resolving failed: keep retrying"
@@ -229,7 +229,7 @@ msgstr "не выходить из программы если резолвин�
 
 #: help.c:225
 msgid "bind to an ip-address (and thus interface) with an optional port"
-msgstr "биндиться на ip адрес (и, соответственно, интерфейс) с опциональным портом"
+msgstr "биндиться на ip адрес (и, соответственно, интерфейс), опционально на порт"
 
 #: help.c:227
 msgid "\"TCP fast open\" (TFO), reduces the latency of TCP connects"
@@ -328,7 +328,7 @@ msgstr "ограничить количество переданных данн�
 
 #: help.c:262
 msgid "show the number of KB transferred (for -b)"
-msgstr "показывать количество перданных данных в КБ (для -b)"
+msgstr "показывать количество переданных данных в КБ (для -b)"
 
 #: help.c:266
 #, c-format
@@ -341,7 +341,7 @@ msgstr "тихий режим, возвращать только код возв
 
 #: help.c:268
 msgid "give machine parseable output (see also -o and -e)"
-msgstr "выдавать машинночитаемый вывод (смотрите также -o и -e)"
+msgstr "выдавать машиночитаемый вывод (смотрите также -o и -e)"
 
 #: help.c:269
 msgid "json output, cannot be combined with -m"
@@ -361,7 +361,7 @@ msgstr "Nagios-mode 1: возвращать 1 когда сред. времен�
 
 #: help.c:273
 msgid "Nagios mode 2: return 0 when all fine, 'x' when anything failes"
-msgstr "Nagios mode 2: возвращать 0 когда все впорядке, 'x' когда что-то идет не так"
+msgstr "Nagios mode 2: возвращать 0 когда все в порядке, 'x' когда что-то идет не так"
 
 #: help.c:274
 msgid "add a cookie to the request"
@@ -444,7 +444,7 @@ msgstr "set_fd_blocking потерпел неудачу! (%s)"
 #: main.c:108
 #, c-format
 msgid "%s, run time: %.3fs, press ctrl + c to stop"
-msgstr "%s, время работы: %.3fs, нажимте ctrl + c чтобы остановить"
+msgstr "%s, время работы: %.3fs, нажмите ctrl + c чтобы остановить"
 
 #: main.c:244
 #: main.c:243
@@ -529,7 +529,7 @@ msgstr "OK - среднее httping-время %.1f (%s)|ping=%f\n"
 #: main.c:733
 #, c-format
 msgid "OK - all fine, avg httping time is %.1f|ping=%f\n"
-msgstr "OK - все впорядке, сред httping время %.1f|ping=%f\n"
+msgstr "OK - все в порядке, сред httping время %.1f|ping=%f\n"
 
 #: main.c:738
 #: main.c:737
@@ -602,7 +602,7 @@ msgstr "Нельзя совместить -m, -M и -K"
 #: main.c:1294
 #: main.c:1289
 msgid "Aggregates can only be used in non-machine/json-output mode"
-msgstr "Вывод совокупностей может быть только использован в немашинночитаемом/json-вывод режиме"
+msgstr "Вывод совокупностей может быть только использован в немашиночитаемом/json-вывод режиме"
 
 #: main.c:1299
 #: main.c:1294
@@ -713,7 +713,7 @@ msgstr "Заголовок запроса > 4КБ! (%d байт) Это може
 #: main.c:1685
 #: main.c:1680
 msgid "timeout connecting to host"
-msgstr "таймаут при подключении к хосту"
+msgstr "тайм-аут при подключении к хосту"
 
 #: main.c:1748
 #: main.c:1743
@@ -725,7 +725,7 @@ msgstr "ошибка при отправке запроса к хосту"
 #: main.c:1745
 #: main.c:1795
 msgid "timeout sending to host"
-msgstr "таймаут при отправке к хосту"
+msgstr "тайм-аут при отправке к хосту"
 
 #: main.c:1752
 #: main.c:1747
@@ -792,7 +792,7 @@ msgstr "короткое чтение во время получения заг�
 #: main.c:1912
 #: main.c:1907
 msgid "timeout while receiving reply-headers from host"
-msgstr "таймаут при получении заголовков ответа от хоста"
+msgstr "тайм-аут при получении заголовков ответа от хоста"
 
 #: main.c:1945
 #: main.c:1940
@@ -919,12 +919,12 @@ msgstr "SSL запись, I/O ошибка: %s"
 #: mssl.c:141
 #, c-format
 msgid "problem setting receive timeout (%s)"
-msgstr "проблема при установке таймаута приема (%s)"
+msgstr "проблема при установке тайм-аута приема (%s)"
 
 #: mssl.c:147
 #, c-format
 msgid "problem setting transmit timeout (%s)"
-msgstr "проблема при установке таймаута передачи (%s)"
+msgstr "проблема при установке тайм-аута передачи (%s)"
 
 #: mssl.c:159
 #, c-format
@@ -1174,12 +1174,12 @@ msgstr "ошибка при установке размера MTU (%s)"
 #: tcp.c:101
 #, c-format
 msgid "error setting transmit buffer size (%s)"
-msgstr "ошибка при установке размера буффера передачи (%s)"
+msgstr "ошибка при установке размера буфера передачи (%s)"
 
 #: tcp.c:110
 #, c-format
 msgid "error setting receive buffer size (%s)"
-msgstr "ошибка при установке размера буффера приема (%s)"
+msgstr "ошибка при установке размера буфера приема (%s)"
 
 #: tcp.c:119
 #, c-format
@@ -1202,7 +1202,7 @@ msgstr "проблема при подключении к хосту: %s"
 
 #: tcp.c:208
 msgid "connect time out"
-msgstr "таймаут при подключении"
+msgstr "тайм-аут при подключении"
 
 #: tcp.c:216
 #, c-format
