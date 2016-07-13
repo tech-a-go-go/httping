@@ -433,12 +433,12 @@ msgstr "mywrite::write потерпел неудачу: %s"
 #: io.c:174
 #, c-format
 msgid "set_fd_nonblocking failed! (%s)\n"
-msgstr "set_fd_nonblocking потерпел неудачу! (%s)"
+msgstr "set_fd_nonblocking потерпел неудачу! (%s)\n"
 
 #: io.c:187
 #, c-format
 msgid "set_fd_blocking failed! (%s)\n"
-msgstr "set_fd_blocking потерпел неудачу! (%s)"
+msgstr "set_fd_blocking потерпел неудачу! (%s)\n"
 
 #: main.c:109
 #: main.c:108
