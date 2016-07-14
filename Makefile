@@ -61,6 +61,7 @@ OBJS=gen.o http.o io.o error.o utils.o main.o tcp.o res.o socks5.o kalman.o cook
 
 MAN_EN=httping.1
 MAN_NL=httping-nl.1
+MAN_RU=httping-ru.1
 
 DOCS=license.txt license.OpenSSL readme.txt
 
@@ -110,6 +111,8 @@ install: $(TARGET) $(TRANSLATIONS)
 	$(INSTALLMAN) $(MAN_EN) $(DESTDIR)/$(MANDIR)/man1
 	$(INSTALLDIR) $(DESTDIR)/$(MANDIR)/nl/man1
 	$(INSTALLMAN) $(MAN_NL) $(DESTDIR)/$(MANDIR)/nl/man1
+	$(INSTALLDIR) $(DESTDIR)/$(MANDIR)/ru/man1
+	$(INSTALLMAN) $(MAN_RU) $(DESTDIR)/$(MANDIR)/ru/man1
 	$(INSTALLDIR) $(DESTDIR)/$(DOCDIR)
 	$(INSTALLDOC) $(DOCS) $(DESTDIR)/$(DOCDIR)
 ifneq ($(DEBUG),yes)
@@ -140,7 +143,7 @@ package:
 	# source package
 	$(RMDIR) $(PACKAGE)*
 	$(MKDIR) $(PACKAGE)
-	$(INSTALLDOC) *.c *.h configure Makefile *.po version $(MAN_EN) $(MAN_NL) $(DOCS) $(PACKAGE)
+	$(INSTALLDOC) *.c *.h configure Makefile *.po version $(MAN_EN) $(MAN_NL) $(MAN_RU) $(DOCS) $(PACKAGE)
 	$(INSTALLBIN) configure $(PACKAGE)
 	$(ARCHIVE) $(PACKAGE) | $(COMPRESS) > $(PACKAGE).tgz
 	$(RMDIR) $(PACKAGE)
