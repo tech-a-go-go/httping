@@ -353,7 +353,7 @@ int connect_ssl_proxy(const int fd, struct addrinfo *const ai, const double time
 
 	request_headers_len += snprintf(&request_headers[request_headers_len], sizeof request_headers - request_headers_len, "\r\n");
 
-	if ((rc = connect_to(fd, ai, timeout, tfo, request_headers, request_headers_len, &rh_sent)) < 0)
+	if ((rc = connect_to(fd, ai, timeout, tfo, request_headers, request_headers_len, &rh_sent)) == -1)
 		return rc;
 
 	if (!rh_sent)

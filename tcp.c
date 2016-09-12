@@ -36,7 +36,7 @@ int set_no_delay(int fd)
 {
 	int flag = 1;
 
-	if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int)) < 0)
+	if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int)) == -1)
 	{
 		set_error(gettext("could not set TCP_NODELAY on socket (%s)"), strerror(errno));
 		return -1;

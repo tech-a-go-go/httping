@@ -23,7 +23,7 @@ int socks5connect(int fd, struct addrinfo *ai, double timeout, const char *socks
 	unsigned char io_buffer[256] = { 0 };
 	int io_len = 0, rc = -1;
 
-	if ((rc = connect_to(fd, ai, timeout, NULL, NULL, 0, NULL)) < 0)
+	if ((rc = connect_to(fd, ai, timeout, NULL, NULL, 0, NULL)) == -1)
 		return rc;
 
 	/* inform socks server about the auth. methods we support */

@@ -1,7 +1,7 @@
 # Dutch translations for HTTPing package.
-# Copyright (C) 2015 folkert van heusden
+# Copyright (C) 2016 folkert van heusden
 # This file is distributed under the same license as the HTTPing package.
-# folkert van heusden <mail@vanheusden.com>, 2015.
+# folkert van heusden <mail@vanheusden.com>, 2016.
 # Translated by Joris Zwart - http://joriszwart.nl/
 #
 msgid ""
