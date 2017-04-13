@@ -256,6 +256,16 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 	}
 	while (!SSL_is_init_finished(*ssl_h) && !got_sigquit);
 
+	X509 *cert = SSL_get_peer_certificate(*ssl_h);
+	if (cert)
+		X509_free(cert);
+	else
+		set_error(gettext("SSL no peer certificate"));
+
+	long v = SSL_get_verify_result(*ssl_h);
+	if (v != X509_V_OK)
+		set_error(gettext("SSL certificate validation failed: %s"), X509_verify_cert_error_string(v));
+
 	if (got_sigquit)
 		return -1;
 
