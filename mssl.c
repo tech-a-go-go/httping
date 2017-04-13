@@ -277,7 +277,7 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 	return 0;
 }
 
-SSL_CTX * initialize_ctx(const char ask_compression)
+SSL_CTX * initialize_ctx(const char ask_compression, const char *ca_path)
 {
 	const SSL_METHOD *meth = NULL;
 	SSL_CTX *ctx = NULL;
@@ -295,6 +295,11 @@ SSL_CTX * initialize_ctx(const char ask_compression)
 	/* create context */
 	meth = SSLv23_method();
 	ctx = SSL_CTX_new(meth);
+
+	if (ca_path == NULL)
+		ca_path = "/etc/ssl/certs";
+
+	SSL_CTX_load_verify_locations(ctx, NULL, ca_path);
 
 #ifdef SSL_OP_NO_COMPRESSION
 	if (!ask_compression)

@@ -944,6 +944,7 @@ int main(int argc, char *argv[])
 #ifndef NO_SSL
 	SSL_CTX *client_ctx = NULL;
 #endif
+	const char *ca_path = NULL;
 	struct sockaddr_in6 addr;
 	struct addrinfo *ai = NULL, *ai_use = NULL;
 	struct addrinfo *ai_proxy = NULL, *ai_use_proxy = NULL;
@@ -1018,6 +1019,7 @@ int main(int argc, char *argv[])
 		{"priority", 1, NULL, 23 },
 		{"tos", 1, NULL, 24 },
 		{"header", 1, NULL, 25 },
+		{"ca-path", 1, NULL, 26 },
 #ifdef NC
 		{"ncurses",	0, NULL, 'K' },
 		{"gui",	0, NULL, 'K' },
@@ -1060,6 +1062,10 @@ int main(int argc, char *argv[])
 	{
 		switch(c)
 		{
+			case 26:
+				ca_path = optarg;
+				break;
+
 			case 25:
 				add_header(&additional_headers, &n_additional_headers, optarg);
 				break;
@@ -1478,7 +1484,7 @@ int main(int argc, char *argv[])
 #ifndef NO_SSL
 	if (use_ssl)
 	{
-		client_ctx = initialize_ctx(ask_compression);
+		client_ctx = initialize_ctx(ask_compression, ca_path);
 		if (!client_ctx)
 		{
 			set_error(gettext("problem creating SSL context"));
@@ -1819,7 +1825,7 @@ persistent_loop:
 			   e.g. until the transmitbuffers are empty and the data was
 			   sent to the next hop
 			 */
-#ifndef __CYGWIN__
+#ifdef linux
 			for(;;)
 			{
 				int bytes_left = 0;

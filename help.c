@@ -74,7 +74,7 @@ void new_version_alert(void)
 
 void version(void)
 {
-	fprintf(stderr, gettext("HTTPing v" VERSION ", (C) 2003-2016 folkert@vanheusden.com\n"));
+	fprintf(stderr, gettext("HTTPing v" VERSION ", (C) 2003-2017 folkert@vanheusden.com\n"));
 #ifndef NO_SSL
 	fprintf(stderr, gettext(" * SSL support included (-l)\n"));
 #endif
@@ -253,6 +253,7 @@ void usage(const char *me)
 	format_help(NULL, "--aggregate x[,y[,z]]", gettext("show an aggregate each x[/y[/z[/etc]]] seconds"));
 #ifndef NO_SSL
 	format_help("-z", "--show-fingerprint", gettext("show fingerprint (SSL)"));
+	format_help(NULL, "--ca-path", gettext("path to ca certificates (SSL)"));
 #endif
 	format_help("-v", NULL, gettext("verbose mode"));
 	fprintf(stderr, gettext("\n"));
