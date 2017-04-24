@@ -297,7 +297,11 @@ SSL_CTX * initialize_ctx(const char ask_compression, const char *ca_path)
 	ctx = SSL_CTX_new(meth);
 
 	if (ca_path == NULL)
+#if defined(__NetBSD__)
+		ca_path = "/etc/openssl/certs";
+#else
 		ca_path = "/etc/ssl/certs";
+#endif
 
 	SSL_CTX_load_verify_locations(ctx, NULL, ca_path);
 
