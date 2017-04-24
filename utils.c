@@ -115,3 +115,15 @@ char * format_value(double value, int digits_sig, int digits_nsig, char abbrevia
 
 	return out;
 }
+
+void myusleep(useconds_t v)
+{
+	int s = v / 1000000;
+
+	if (s)
+		sleep(s);
+
+	v %= 1000000;
+	if (v)
+		usleep(v);
+}

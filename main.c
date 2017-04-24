@@ -1842,7 +1842,7 @@ persistent_loop:
 				 * I know of no other way to wait for the kernel to
 				 * finish the transmission
 				 */
-				usleep(write_sleep);
+				myusleep(write_sleep);
 			}
 #endif
 
@@ -2377,7 +2377,7 @@ persistent_loop:
 					cur_sleep = wait - interval_left;
 			}
 
-			usleep((useconds_t)(cur_sleep * 1000000.0));
+			myusleep((useconds_t)(cur_sleep * 1000000.0));
 		}
 
 		reset_statst_cur(&t_resolve);

@@ -15,3 +15,5 @@ char * format_value(double value, int digits_sig, int digits_nsig, char abbrevia
 
 #define min(x, y)	((x) < (y) ? (x) : (y))
 #define max(x, y)	((x) > (y) ? (x) : (y))
+
+void myusleep(useconds_t v);
