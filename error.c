@@ -11,6 +11,8 @@
 
 char last_error[4096] = { 0 };
 
+extern char json_output;
+
 void error_exit(char *format, ...)
 {
 	int e = errno;
@@ -19,6 +21,10 @@ void error_exit(char *format, ...)
 	va_start(ap, format);
 	(void)vfprintf(stderr, format, ap);
 	va_end(ap);
+
+	if (json_output) {
+	  printf("\n]\n");
+	}
 
 	fprintf(stderr, gettext("\n\nerrno=%d which means %s (if applicable)\n"), e, strerror(e));
 
