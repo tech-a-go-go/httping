@@ -1753,7 +1753,6 @@ persistent_loop:
 
 			if (fd < 0)
 			{
-				emit_error(verbose, curncount, dstart);
 				fd = -1;
 			}
 
