@@ -1768,7 +1768,7 @@ persistent_loop:
 #ifndef NO_SSL
 				if (use_ssl && ssl_h == NULL)
 				{
-					int rc = connect_ssl(fd, client_ctx, &ssl_h, &s_bio, timeout, &ssl_handshake);
+					int rc = connect_ssl(fd, client_ctx, &ssl_h, &s_bio, timeout, &ssl_handshake, hostname);
 					if (rc == 0)
 						update_statst(&t_ssl, ssl_handshake);
 					else

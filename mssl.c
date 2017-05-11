@@ -185,7 +185,7 @@ int WRITE_SSL(SSL *const ssl_h, const char *wherefrom, int len, const double tim
 	return cnt;
 }
 
-int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO **const s_bio, const double timeout, double *const ssl_handshake)
+int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO **const s_bio, const double timeout, double *const ssl_handshake, char *const hostname)
 {
 	double dstart = get_ts();
 	double end = get_ts() + timeout;
@@ -209,6 +209,9 @@ int connect_ssl(const int fd, SSL_CTX *const client_ctx, SSL **const ssl_h, BIO 
 	}
 
 	*ssl_h = SSL_new(client_ctx);
+
+	X509_VERIFY_PARAM *param = SSL_get0_param(*ssl_h);
+	X509_VERIFY_PARAM_set1_host(param, hostname, 0);
 
 	*s_bio = BIO_new_socket(fd, BIO_NOCLOSE);
 	SSL_set_bio(*ssl_h, *s_bio, *s_bio);
