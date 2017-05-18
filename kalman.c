@@ -45,7 +45,7 @@ double kalman_do(double z_measured)
 
 #ifdef _TEST
 	printf("Ideal    position: %6.3f \n",z_real);
-	printf("Mesaured position: %6.3f [diff:%.3f]\n",z_measured,fabs(z_real-z_measured));
+	printf("Measured position: %6.3f [diff:%.3f]\n",z_measured,fabs(z_real-z_measured));
 	printf("Kalman   position: %6.3f [diff:%.3f]\n",x_est,fabs(z_real - x_est));
 #endif
 
