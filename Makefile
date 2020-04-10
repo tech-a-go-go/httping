@@ -36,7 +36,9 @@ DEBUG=yes
 WFLAGS=-Wall -W -Wextra -pedantic -D_FORTIFY_SOURCE=2
 OFLAGS=
 CFLAGS+=$(WFLAGS) $(OFLAGS) -DVERSION=\"$(VERSION)\" -DLOCALEDIR=\"$(LOCALEDIR)\"
+CFLAGS+=-I/usr/local/openssl-1.1.1f/include
 LDFLAGS+=-lm
+LDFLAGS+=-L/usr/local/openssl-1.1.1f/lib
 
 PACKAGE=$(TARGET)-$(VERSION)
 PREFIX?=/usr
